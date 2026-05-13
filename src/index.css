@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "DM Serif Display", ui-serif, Georgia, serif;
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream-50: #fdfcfa;
+  --color-cream-100: #faf7f0;
+  --color-cream-200: #f5f3ed;
+  --color-cream-300: #e8e4d9;
+
+  --color-gold-400: #d4b87a;
+  --color-gold-500: #c5a059;
+  --color-gold-600: #a6843d;
+
+  --color-forest-700: #1e2d1f;
+  --color-forest-800: #152018;
+  --color-forest-900: #0f1610;
+
+  --color-moss-500: #3d5c3f;
+  --color-moss-600: #2f4531;
+
+  --shadow-glow: 0 0 80px -20px rgb(197 160 89 / 0.45);
+
+  --animate-accordion-down: accordion-down 0.22s ease-out;
+  --animate-accordion-up: accordion-up 0.18s ease-out;
+}
+
+@layer base {
+  html {
+    @apply antialiased scroll-smooth;
+  }
+  body {
+    @apply bg-cream-200 text-forest-900 font-sans;
+  }
+  ::selection {
+    @apply bg-gold-500/30 text-forest-900;
+  }
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+/* Swiper scoped tweaks */
+.swiper-pagination-bullet-active {
+  @apply !bg-gold-500;
+}
