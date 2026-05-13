@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import { PublicLayout } from '@/components/layout/PublicLayout'
 import { RequireAuth } from '@/routes/RequireAuth'
 import { AdminLayout } from '@/layouts/AdminLayout'
+import { SplashScreenHost } from '@/components/splash/SplashScreenHost'
 
 const HomePage = lazy(() => import('@/pages/HomePage'))
 const AboutPage = lazy(() => import('@/pages/AboutPage'))
@@ -36,31 +37,33 @@ function SuspenseShell({ children }: { children: ReactNode }) {
 
 export default function App() {
   return (
-    <SuspenseShell>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="about" element={<AboutPage />} />
-          <Route path="services" element={<ServicesPage />} />
-          <Route path="produce" element={<ProducePage />} />
-          <Route path="growers" element={<GrowersPage />} />
-          <Route path="gallery" element={<GalleryPage />} />
-          <Route path="shop" element={<ShopPage />} />
-          <Route path="contact" element={<ContactPage />} />
-          <Route path="faq" element={<FaqPage />} />
-          <Route path="privacy" element={<PrivacyPage />} />
-          <Route path="terms" element={<TermsPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-
-        <Route element={<RequireAuth />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboardPage />} />
+    <SplashScreenHost>
+      <SuspenseShell>
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="services" element={<ServicesPage />} />
+            <Route path="produce" element={<ProducePage />} />
+            <Route path="growers" element={<GrowersPage />} />
+            <Route path="gallery" element={<GalleryPage />} />
+            <Route path="shop" element={<ShopPage />} />
+            <Route path="contact" element={<ContactPage />} />
+            <Route path="faq" element={<FaqPage />} />
+            <Route path="privacy" element={<PrivacyPage />} />
+            <Route path="terms" element={<TermsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
-        </Route>
-      </Routes>
-    </SuspenseShell>
+
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+
+          <Route element={<RequireAuth />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboardPage />} />
+            </Route>
+          </Route>
+        </Routes>
+      </SuspenseShell>
+    </SplashScreenHost>
   )
 }
