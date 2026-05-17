@@ -1,3 +1,5 @@
+import { LOCAL_GALLERY_IMAGES } from '@/constants/assets'
+
 export type GalleryImage = {
   id: string
   url: string
@@ -11,7 +13,18 @@ export type SiteConfig = {
     subtitle: string
     kicker: string
     primaryCta: string
+    primaryCtaUrl: string
     secondaryCta: string
+    secondaryCtaUrl: string
+  }
+  footerContent: string
+  socialLinks: {
+    instagram: string
+    facebook: string
+    youtube: string
+    linkedin: string
+    twitter: string
+    whatsapp: string
   }
   contact: {
     email: string
@@ -36,7 +49,19 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
     subtitle:
       'Fifty acres of clean, high-quality produce. Sixty-plus growers across one hundred five acres supported with turnkey orchard solutions that prioritise long-term success.',
     primaryCta: 'Explore our produce',
+    primaryCtaUrl: '/produce',
     secondaryCta: 'Talk on WhatsApp',
+    secondaryCtaUrl: '',
+  },
+  footerContent:
+    'DRP Exotic Farms blends estate-grown produce, grower partnerships, and long-horizon orchard programmes into one continuous experience.',
+  socialLinks: {
+    instagram: '',
+    facebook: '',
+    youtube: '',
+    linkedin: '',
+    twitter: '',
+    whatsapp: '',
   },
   contact: {
     email: 'hello@drpexoticfarms.example',
@@ -53,36 +78,5 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = {
     description:
       'Occasional updates on seasonality, orchard practices, and when packaged goods go live—double opt-in where your provider requires it.',
   },
-  gallery: [
-    {
-      id: '1',
-      url: 'https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1200&q=80',
-      alt: 'Sunlit greenhouse rows with young plants',
-    },
-    {
-      id: '2',
-      url: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200&q=80',
-      alt: 'Hands inspecting rich soil in a cultivated field',
-    },
-    {
-      id: '3',
-      url: 'https://images.unsplash.com/photo-1599599810769-bcde5a160d32?w=1200&q=80',
-      alt: 'Avocados clustered on a branch',
-    },
-    {
-      id: '4',
-      url: 'https://images.unsplash.com/photo-1605027990121-c42e40f435c5?w=1200&q=80',
-      alt: 'Dragon fruit growing on a cactus vine',
-    },
-    {
-      id: '5',
-      url: 'https://images.unsplash.com/photo-1628773822500-88124ab98037?w=1200&q=80',
-      alt: 'Blueberries close-up showing bloom and fruit',
-    },
-    {
-      id: '6',
-      url: 'https://images.unsplash.com/photo-1517282009859-f000e3a26c1f?w=1200&q=80',
-      alt: 'Mango orchard canopy in warm light',
-    },
-  ],
+  gallery: [...LOCAL_GALLERY_IMAGES],
 }

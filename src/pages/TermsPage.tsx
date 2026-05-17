@@ -1,75 +1,55 @@
 import { PageMeta } from '@/components/seo/PageMeta'
 
+const sections = [
+  {
+    title: 'Use of this website',
+    body: 'By accessing this website, you agree to these terms. Content is provided for general information and does not replace agronomic, legal, or financial advice.',
+  },
+  {
+    title: 'Accuracy and reliance',
+    body: 'DRP aims to describe its programmes and produce truthfully, but field outcomes always depend on weather, execution, and market dynamics beyond any website narrative.',
+  },
+  {
+    title: 'Enquiries and contracts',
+    body: 'Messages sent through forms, email, or WhatsApp do not create a binding agreement until confirmed in writing with agreed commercial terms.',
+  },
+  {
+    title: 'Intellectual property',
+    body: 'Text, layout, imagery, and brand elements belong to Drpexoticfarms™ or are used under license. Unauthorized copying or scraping may violate applicable law.',
+  },
+  {
+    title: 'Third-party services and liability',
+    body: 'Maps, hosting, analytics, and communication platforms operate under their own terms. To the extent permitted by law, DRP is not liable for indirect or consequential losses arising from website use.',
+  },
+] as const
+
 export default function TermsPage() {
   return (
     <>
       <PageMeta
         title="Terms & conditions"
-        description="Terms governing use of the Drpexoticfarms™ website, enquiries, content accuracy, and limitations of liability."
+        description="Terms governing use of the DRP Exotic Farms website, enquiries, third-party services, and content reliance."
         path="/terms"
       />
-      <article className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
-        <h1 className="font-display text-4xl text-forest-900">Terms &amp; conditions</h1>
-        <p className="mt-3 text-sm text-forest-900/60">Last updated: {new Date().toISOString().slice(0, 10)}</p>
 
-        <div className="mt-10 space-y-8 text-forest-900/80">
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Use of this website</h2>
-            <p>
-              By accessing this website, you agree to these terms. If you disagree, discontinue use. Content is provided
-              for general information and does not constitute agronomic, legal, or financial advice on its own.
-            </p>
-          </section>
+      <div className="relative overflow-hidden">
+        <section className="section-shell py-14 sm:py-18 lg:py-24">
+          <div className="max-w-4xl">
+            <span className="section-label">Terms &amp; conditions</span>
+            <h1 className="section-title mt-6 text-forest-900">Clear terms, presented with the same sense of care as every other page.</h1>
+            <p className="mt-4 text-sm text-forest-900/55">Last updated: {new Date().toISOString().slice(0, 10)}</p>
+          </div>
 
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Accuracy</h2>
-            <p>
-              We aim for accuracy in describing programmes, geographies served, and produce characteristics. Field
-              outcomes depend on weather, execution, and market factors beyond any website narrative.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Enquiries and reliance</h2>
-            <p>
-              Messages sent through forms or WhatsApp do not create a binding contract until confirmed in writing by
-              authorised representatives with agreed commercial terms.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Intellectual property</h2>
-            <p>
-              Text, imagery, layouts, and branding elements are owned by Drpexoticfarms™ or used under licence.
-              Unauthorised copying or scraping may violate applicable law.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Third-party services</h2>
-            <p>
-              Maps, analytics, email providers, and hosting platforms operate under their own terms. Your infrastructure
-              choices may add additional obligations.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Limitation of liability</h2>
-            <p>
-              To the maximum extent permitted by law, we are not liable for indirect or consequential losses arising from
-              use of the website or reliance on its content.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="font-display text-2xl text-forest-900">Governing law</h2>
-            <p>
-              These terms are intended to be governed by the laws of India unless a separate written agreement specifies
-              otherwise.
-            </p>
-          </section>
-        </div>
-      </article>
+          <div className="responsive-stack-grid mt-8 gap-4 sm:mt-10 sm:gap-5">
+            {sections.map((section) => (
+              <article key={section.title} className="cinematic-surface rounded-[1.9rem] p-6">
+                <h2 className="font-display text-3xl leading-none text-forest-900">{section.title}</h2>
+                <p className="mt-3 max-w-3xl text-sm leading-relaxed text-forest-900/70">{section.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
     </>
   )
 }

@@ -6,6 +6,8 @@ import { motion } from 'framer-motion'
 import Tilt from 'react-parallax-tilt'
 import { ArrowRight, Leaf } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
+import { LOCAL_ASSETS } from '@/constants/assets'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
 
@@ -74,15 +76,21 @@ export function HomeHero() {
           <dl className="hero-fade mt-10 grid max-w-xl grid-cols-3 gap-4 text-sm">
             <div className="rounded-2xl border border-cream-300/80 bg-cream-50/60 p-4 backdrop-blur">
               <dt className="text-xs font-semibold uppercase tracking-wider text-forest-900/55">Estate</dt>
-              <dd className="mt-1 font-display text-2xl text-forest-900">50 acres</dd>
+              <dd className="mt-1 text-2xl text-forest-900">
+                <AnimatedNumber value={50} suffix=" acres" duration={1.3} className="text-2xl text-forest-900" />
+              </dd>
             </div>
             <div className="rounded-2xl border border-cream-300/80 bg-cream-50/60 p-4 backdrop-blur">
               <dt className="text-xs font-semibold uppercase tracking-wider text-forest-900/55">Growers</dt>
-              <dd className="mt-1 font-display text-2xl text-forest-900">60+</dd>
+              <dd className="mt-1 text-2xl text-forest-900">
+                <AnimatedNumber value={60} suffix="+" duration={1.3} className="text-2xl text-forest-900" />
+              </dd>
             </div>
             <div className="rounded-2xl border border-cream-300/80 bg-cream-50/60 p-4 backdrop-blur">
               <dt className="text-xs font-semibold uppercase tracking-wider text-forest-900/55">Supported acres</dt>
-              <dd className="mt-1 font-display text-2xl text-forest-900">105+</dd>
+              <dd className="mt-1 text-2xl text-forest-900">
+                <AnimatedNumber value={105} suffix="+" duration={1.4} className="text-2xl text-forest-900" />
+              </dd>
             </div>
           </dl>
         </div>
@@ -105,10 +113,10 @@ export function HomeHero() {
           >
             <div className="overflow-hidden rounded-[1.6rem] ring-1 ring-black/5">
               <img
-                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&q=80"
-                width={900}
-                height={1100}
-                alt="Rolling orchard rows at sunrise"
+                src={LOCAL_ASSETS.orchardTeam}
+                width={1920}
+                height={1292}
+                alt="DRP Exotic Farms team standing in the orchard"
                 loading="eager"
                 decoding="async"
                 className="aspect-[4/5] w-full object-cover"

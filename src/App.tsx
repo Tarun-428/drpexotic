@@ -16,10 +16,16 @@ const ContactPage = lazy(() => import('@/pages/ContactPage'))
 const FaqPage = lazy(() => import('@/pages/FaqPage'))
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'))
 const TermsPage = lazy(() => import('@/pages/TermsPage'))
+const BlogPage = lazy(() => import('@/pages/BlogPage'))
+const BlogPostPage = lazy(() => import('@/pages/BlogPostPage'))
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 const AdminLoginPage = lazy(() => import('@/pages/admin/AdminLoginPage'))
 const AdminDashboardPage = lazy(() => import('@/pages/admin/AdminDashboardPage'))
+const AdminGalleryPage = lazy(() => import('@/pages/admin/AdminGalleryPage'))
+const AdminBlogsPage = lazy(() => import('@/pages/admin/AdminBlogsPage'))
+const AdminMediaPage = lazy(() => import('@/pages/admin/AdminMediaPage'))
+const AdminSettingsPage = lazy(() => import('@/pages/admin/AdminSettingsPage'))
 
 function SuspenseShell({ children }: { children: ReactNode }) {
   return (
@@ -49,6 +55,8 @@ export default function App() {
             <Route path="gallery" element={<GalleryPage />} />
             <Route path="shop" element={<ShopPage />} />
             <Route path="contact" element={<ContactPage />} />
+            <Route path="journal" element={<BlogPage />} />
+            <Route path="journal/:slug" element={<BlogPostPage />} />
             <Route path="faq" element={<FaqPage />} />
             <Route path="privacy" element={<PrivacyPage />} />
             <Route path="terms" element={<TermsPage />} />
@@ -60,6 +68,10 @@ export default function App() {
           <Route element={<RequireAuth />}>
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboardPage />} />
+              <Route path="gallery" element={<AdminGalleryPage />} />
+              <Route path="blogs" element={<AdminBlogsPage />} />
+              <Route path="media" element={<AdminMediaPage />} />
+              <Route path="settings" element={<AdminSettingsPage />} />
             </Route>
           </Route>
         </Routes>

@@ -1,9 +1,7 @@
-import * as CountUpModule from 'react-countup'
 import { useInView } from 'react-intersection-observer'
 import { animated, useSpring } from '@react-spring/web'
 import { motion } from 'framer-motion'
-
-const CountUp = (CountUpModule as any)?.default?.default ?? (CountUpModule as any)?.default ?? CountUpModule
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
 
 function MetricCard({
   label,
@@ -31,8 +29,8 @@ function MetricCard({
       >
         <div className="pointer-events-none absolute -right-10 -top-10 size-40 rounded-full bg-gold-500/10 blur-2xl" />
         <p className="text-xs font-semibold uppercase tracking-wider text-forest-900/55">{label}</p>
-        <p className="mt-2 font-display text-4xl text-forest-900 sm:text-5xl">
-          {inView ? <CountUp end={value} duration={2.1} decimals={decimals} preserveValue suffix={suffix} /> : '0'}
+        <p className="mt-2 text-4xl text-forest-900 sm:text-5xl">
+          <AnimatedNumber value={value} duration={2.1} decimals={decimals} suffix={suffix} play={inView} />
         </p>
       </animated.div>
     </div>

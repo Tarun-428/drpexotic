@@ -72,3 +72,28 @@ export const DialogDescription = React.forwardRef<
   />
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
+
+// Top-attached sheet variant for mobile menus
+export const DialogSheet = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPortal>
+    <DialogOverlay />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(
+        'fixed inset-x-0 top-0 z-50 grid w-full max-w-none gap-4 border border-cream-300 bg-cream-100 p-4 shadow-2xl transition-all data-[state=closed]:-translate-y-6 data-[state=open]:translate-y-0 sm:rounded-b-2xl',
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      <DialogPrimitive.Close className="absolute right-4 top-4 rounded-full p-1 text-forest-900/60 transition hover:bg-cream-300/60 hover:text-forest-900 focus:outline-none focus:ring-2 focus:ring-gold-500">
+        <X className="size-4" />
+        <span className="sr-only">Close</span>
+      </DialogPrimitive.Close>
+    </DialogPrimitive.Content>
+  </DialogPortal>
+))
+DialogSheet.displayName = 'DialogSheet'

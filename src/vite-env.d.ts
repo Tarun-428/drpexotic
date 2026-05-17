@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL?: string
   readonly VITE_WHATSAPP_PHONE?: string
   readonly VITE_GOOGLE_MAPS_EMBED_URL?: string
   readonly VITE_ADMIN_PASSWORD?: string

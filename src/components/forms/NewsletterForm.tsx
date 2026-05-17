@@ -43,7 +43,7 @@ export function NewsletterForm() {
   })
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
+    <form onSubmit={onSubmit} className="grid gap-4">
       <div className="grid gap-2">
         <Label htmlFor="newsletter-email">Email</Label>
         <Input
@@ -57,23 +57,27 @@ export function NewsletterForm() {
           <p className="text-xs text-red-700">{form.formState.errors.email.message}</p>
         ) : null}
       </div>
-      <div className="grid gap-2 sm:col-span-2">
-        <label className="flex items-start gap-2 text-sm text-forest-900/75">
-          <input type="checkbox" className="mt-1 size-4 rounded border-cream-300" {...form.register('consent')} />
+
+      <div className="grid gap-2">
+        <label className="flex items-start gap-3 text-sm leading-relaxed text-forest-900/72">
+          <input
+            type="checkbox"
+            className="mt-1 size-4 rounded border-gold-500/45 accent-[rgb(200,169,107)]"
+            {...form.register('consent')}
+          />
           <span>
-            I agree to receive occasional updates about produce, orchard programmes, and future online sales. I
-            understand I can unsubscribe at any time.
+            I agree to receive occasional updates about produce, orchard programmes, and future online sales. I can
+            unsubscribe at any time.
           </span>
         </label>
         {form.formState.errors.consent?.message ? (
           <p className="text-xs text-red-700">{form.formState.errors.consent.message}</p>
         ) : null}
       </div>
-      <div className="sm:col-span-2">
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? 'Submitting…' : 'Subscribe'}
-        </Button>
-      </div>
+
+      <Button type="submit" disabled={form.formState.isSubmitting} className="w-full sm:w-fit">
+        {form.formState.isSubmitting ? 'Submitting…' : 'Join the seasonal list'}
+      </Button>
     </form>
   )
 }
