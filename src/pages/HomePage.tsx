@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import { PageMeta } from '@/components/seo/PageMeta'
 import { HomeNewsTicker } from '@/components/blog/HomeNewsTicker'
+import { InstagramReelsPanel } from '@/components/social/InstagramReelsSection'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
@@ -275,24 +276,28 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="cinematic-surface rounded-[1.4rem] p-3.5 text-cream-50 sm:rounded-[1.8rem] sm:p-5">
-                <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gold-400">What DRP does</p>
-                <div className="mt-3 grid gap-2.5">
-                  {[
-                    'Grows premium exotic produce.',
-                    'Designs orchard programmes.',
-                    'Supports growers with practical systems.',
-                    'Builds market confidence through field discipline.',
-                  ].map((item) => (
-                    <div key={item} className="rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2.5">
-                      <div className="flex items-start gap-2.5">
-                        <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-gold-400/18 text-gold-400">
-                          <Check className="size-3" />
-                        </span>
-                        <p className="text-xs leading-relaxed text-cream-50/78 sm:text-sm">{item}</p>
+              <div className="grid gap-2.5 sm:gap-3">
+                <InstagramReelsPanel />
+
+                <div className="cinematic-surface rounded-[1.35rem] p-3 text-cream-50 sm:rounded-[1.65rem] sm:p-4">
+                  <p className="text-[0.65rem] font-semibold uppercase tracking-[0.28em] text-gold-400">What DRP does</p>
+                  <div className="mt-2.5 grid gap-2">
+                    {[
+                      'Grows premium exotic produce.',
+                      'Designs orchard programmes.',
+                      'Supports growers with practical systems.',
+                      'Builds market confidence through field discipline.',
+                    ].map((item) => (
+                      <div key={item} className="rounded-[0.95rem] border border-white/10 bg-black/18 px-3 py-2.5">
+                        <div className="flex items-start gap-2.5">
+                          <span className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center rounded-full bg-gold-400/18 text-gold-400">
+                            <Check className="size-3" />
+                          </span>
+                          <p className="text-xs leading-relaxed text-cream-50/78 sm:text-sm">{item}</p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>

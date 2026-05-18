@@ -9,11 +9,8 @@ const HomePage = lazy(() => import('@/pages/HomePage'))
 const AboutPage = lazy(() => import('@/pages/AboutPage'))
 const ServicesPage = lazy(() => import('@/pages/ServicesPage'))
 const ProducePage = lazy(() => import('@/pages/ProducePage'))
-const GrowersPage = lazy(() => import('@/pages/GrowersPage'))
 const GalleryPage = lazy(() => import('@/pages/GalleryPage'))
-const ShopPage = lazy(() => import('@/pages/ShopPage'))
 const ContactPage = lazy(() => import('@/pages/ContactPage'))
-const FaqPage = lazy(() => import('@/pages/FaqPage'))
 const PrivacyPage = lazy(() => import('@/pages/PrivacyPage'))
 const TermsPage = lazy(() => import('@/pages/TermsPage'))
 const BlogPage = lazy(() => import('@/pages/BlogPage'))
@@ -51,13 +48,11 @@ export default function App() {
             <Route path="about" element={<AboutPage />} />
             <Route path="services" element={<ServicesPage />} />
             <Route path="produce" element={<ProducePage />} />
-            <Route path="growers" element={<GrowersPage />} />
             <Route path="gallery" element={<GalleryPage />} />
-            <Route path="shop" element={<ShopPage />} />
             <Route path="contact" element={<ContactPage />} />
             <Route path="journal" element={<BlogPage />} />
             <Route path="journal/:slug" element={<BlogPostPage />} />
-            <Route path="faq" element={<FaqPage />} />
+            
             <Route path="privacy" element={<PrivacyPage />} />
             <Route path="terms" element={<TermsPage />} />
             <Route path="*" element={<NotFoundPage />} />

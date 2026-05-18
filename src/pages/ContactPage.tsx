@@ -35,11 +35,10 @@ export default function ContactPage() {
                 Contact
               </span>
               <h1 className="editorial-title mt-6 max-w-5xl text-cream-50">
-                The closing experience should feel as warm and deliberate as the brand itself.
+                We are here to help you.
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-relaxed text-cream-50/74 sm:text-lg lg:mt-6 lg:text-xl">
-                Whether you are sourcing fruit, planning an orchard, or exploring a partnership, this page should feel
-                like the beginning of a thoughtful relationship rather than the end of a website.
+                Let's discuss how we can work together.
               </p>
             </div>
           </div>

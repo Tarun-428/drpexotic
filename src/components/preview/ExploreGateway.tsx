@@ -41,18 +41,6 @@ const exploreItems: ExploreItem[] = [
     image: LOCAL_ASSETS.orchardNight,
   },
   {
-    title: 'Shop',
-    line: 'Seasonal selections',
-    to: '/shop',
-    image: LOCAL_ASSETS.dragonFruitWhole,
-  },
-  {
-    title: 'FAQ',
-    line: 'Quiet answers',
-    to: '/faq',
-    image: LOCAL_ASSETS.avocado,
-  },
-  {
     title: 'Contact',
     line: 'Begin the conversation',
     to: '/contact',

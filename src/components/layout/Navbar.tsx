@@ -20,23 +20,32 @@ const links = [
   { to: '/about', label: 'About' },
   { to: '/services', label: 'Services' },
   { to: '/produce', label: 'Produce' },
-  { to: '/growers', label: 'Growers' },
   { to: '/gallery', label: 'Gallery' },
   { to: '/journal', label: 'Journal' },
-  { to: '/shop', label: 'Shop' },
-  { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact' },
 ] as const
 
-function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: () => void }) {
+function NavItem({
+  to,
+  label,
+  onClick,
+  isTransparent,
+}: {
+  to: string
+  label: string
+  onClick?: () => void
+  isTransparent?: boolean
+}) {
   return (
     <NavLink
       to={to}
       onClick={onClick}
       className={({ isActive }) =>
         cn(
-          'rounded-full px-3 py-2 text-sm font-medium text-forest-900/80 transition hover:text-forest-900',
-          isActive && 'bg-cream-300/70 text-forest-900',
+          'rounded-full px-3 py-2 text-sm font-medium transition-all duration-200',
+          isTransparent
+            ? cn('text-cream-50/92 hover:text-cream-50', isActive && 'bg-white/10 text-cream-50')
+            : cn('text-forest-900/80 hover:text-forest-900', isActive && 'bg-cream-300/70 text-forest-900'),
         )
       }
     >
@@ -47,11 +56,27 @@ function NavItem({ to, label, onClick }: { to: string; label: string; onClick?: 
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
   const wa = buildWhatsAppUrl(
     whatsapp,
     'Hello Drpexoticfarms — I would like guidance on produce / orchard services.',
   )
+
+  useEffect(() => {
+    let ticking = false
+    const onScroll = () => {
+      if (ticking) return
+      ticking = true
+      requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 18)
+        ticking = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   // Lock body scroll when mobile menu is open to avoid background scroll conflicts
   useEffect(() => {
@@ -84,14 +109,31 @@ export function Navbar() {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-40 px-3 pt-3 sm:px-4">
-      <div className="cinematic-surface header-glass mx-auto flex h-[4.1rem] max-w-[min(100%,96rem)] items-center justify-between rounded-full px-3 sm:h-[4.45rem] sm:px-4 lg:px-5">
+    <header
+      className={cn(
+        // Fixed overlay so navbar does not push content down and sits above hero images
+        'fixed inset-x-0 top-0 z-40 px-3 sm:px-4 transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto',
+        scrolled
+          ? 'backdrop-blur-sm bg-black/20 border-b border-white/8 shadow-[0_10px_30px_-18px_rgba(2,6,23,0.6)]'
+          : 'bg-transparent',
+      )}
+      aria-hidden={false}
+    >
+      <div
+        className={cn(
+          'cinematic-surface header-glass mx-auto flex max-w-[min(100%,96rem)] items-center justify-between rounded-full px-3',
+          scrolled ? 'h-[3.8rem] sm:h-[4.0rem] lg:px-5' : 'h-[3.9rem] sm:h-[4.2rem] lg:px-5',
+        )}
+      >
         <Link to="/" className="brand-lockup group" aria-label="Drpexoticfarms home">
           <span className="brand-lockup__mark" data-intro-logo-target>
             <img src={BrandLogo} alt="" className="brand-lockup__mark-logo" aria-hidden="true" decoding="async" />
           </span>
           <div className="brand-lockup__text">
-            <span className="brand-lockup__name">
+            <span
+              className={cn('brand-lockup__name transition-all duration-300',
+                !scrolled ? 'text-cream-50 drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)]' : 'text-cream-50')}
+            >
               Drpexoticfarms<sup>TM</sup>
             </span>
             <span className="brand-lockup__tagline">Cinematic Orchard Estate</span>
@@ -100,7 +142,7 @@ export function Navbar() {
 
         <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary">
           {links.map((l) => (
-            <NavItem key={l.to} to={l.to} label={l.label} />
+            <NavItem key={l.to} to={l.to} label={l.label} isTransparent={!scrolled} />
           ))}
         </nav>
 
@@ -127,7 +169,7 @@ export function Navbar() {
                   transition={{ type: 'spring', stiffness: 260, damping: 18 }}
                   className="inline-flex"
                 >
-                  <Menu className="size-5" />
+                  <Menu className={cn('size-5 transition-colors duration-200', !scrolled ? 'text-cream-50' : 'text-forest-900')} />
                 </motion.span>
               </Button>
             </DialogTrigger>
