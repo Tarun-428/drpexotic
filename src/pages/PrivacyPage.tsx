@@ -33,7 +33,7 @@ export default function PrivacyPage() {
       />
 
       <div className="relative overflow-hidden">
-        <section className="section-shell py-14 sm:py-18 lg:py-24">
+        <section className="section-shell page-section-intro">
           <div className="max-w-4xl">
             <span className="section-label">Privacy policy</span>
             <h1 className="section-title mt-6 text-forest-900">Privacy, handled with the same calm clarity as the rest of the brand.</h1>

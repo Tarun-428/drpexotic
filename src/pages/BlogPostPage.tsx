@@ -66,7 +66,7 @@ export default function BlogPostPage() {
             className="absolute inset-0 h-full w-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,24,18,0.26),rgba(7,24,18,0.86))]" />
-          <div className="section-shell relative z-10 py-18 sm:py-24 lg:py-28">
+          <div className="section-shell page-hero-shell relative z-10">
             <Link to="/journal" className="inline-flex items-center gap-2 text-sm font-semibold text-cream-50/82">
               <ArrowLeft className="size-4" />
               Back to journal

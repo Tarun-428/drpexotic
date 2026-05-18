@@ -1,6 +1,7 @@
-import { useCallback, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { IntroAnimation } from './IntroAnimation'
+import { preloadCriticalAssets, warmPublicRoutes } from '@/routes/routePreloaders'
 
 type SplashScreenHostProps = {
   children: ReactNode
@@ -9,6 +10,15 @@ type SplashScreenHostProps = {
 export function SplashScreenHost({ children }: SplashScreenHostProps) {
   const [splashComplete, setSplashComplete] = useState(false)
   const [handoffStarted, setHandoffStarted] = useState(false)
+
+  useEffect(() => {
+    void warmPublicRoutes()
+    void preloadCriticalAssets()
+
+    if (typeof document !== 'undefined' && 'fonts' in document) {
+      void document.fonts.ready.catch(() => undefined)
+    }
+  }, [])
 
   const beginHandoff = useCallback(() => {
     setHandoffStarted(true)

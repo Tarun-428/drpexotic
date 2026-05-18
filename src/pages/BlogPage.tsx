@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useDeferredValue, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Search, Sparkles, TrendingUp } from 'lucide-react'
 import { PageMeta } from '@/components/seo/PageMeta'
@@ -114,6 +114,7 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true)
   const [activeCategory, setActiveCategory] = useState('All')
   const [heroVisible, setHeroVisible] = useState(false)
+  const deferredSearch = useDeferredValue(search)
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroVisible(true), 60)
@@ -122,10 +123,9 @@ export default function BlogPage() {
 
   useEffect(() => {
     let active = true
-    setLoading(true)
 
     void api
-      .listPublicBlogs({ search: search || undefined })
+      .listPublicBlogs({ search: deferredSearch || undefined })
       .then((response) => {
         if (active && response.items.length > 0) setPosts(response.items)
       })
@@ -137,7 +137,7 @@ export default function BlogPage() {
     return () => {
       active = false
     }
-  }, [search])
+  }, [deferredSearch])
 
   const categories = useMemo(() => ['All', ...Array.from(new Set(posts.flatMap((post) => post.categories)))], [posts])
 
@@ -177,7 +177,7 @@ export default function BlogPage() {
 
       <div className="page-shell relative overflow-x-hidden">
         {/* ── HERO ── */}
-        <section className="relative overflow-hidden px-6 pb-10 pt-22 text-cream-50 sm:pb-12 lg:pb-16 lg:pt-24">
+        <section className="page-hero-shell--tall relative overflow-hidden px-6 text-cream-50">
           <div className="absolute inset-0 pointer-events-none opacity-80">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(200,169,107,0.16),transparent_28%),radial-gradient(circle_at_80%_22%,rgba(90,143,99,0.18),transparent_26%),radial-gradient(circle_at_50%_100%,rgba(11,61,46,0.5),transparent_40%)]" />
             <img
@@ -237,7 +237,10 @@ export default function BlogPage() {
                 <Search className="h-4 w-4 shrink-0 text-cream-50/40" />
                 <input
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={(e) => {
+                    setLoading(true)
+                    setSearch(e.target.value)
+                  }}
                   placeholder="Search stories, seasons, insights…"
                   className="w-full border-none bg-transparent text-[0.86rem] text-cream-50 outline-none placeholder:text-cream-50/34"
                 />

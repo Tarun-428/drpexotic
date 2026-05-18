@@ -247,7 +247,7 @@ export default function ProducePage() {
       <div className="relative overflow-hidden">
         <section className="relative isolate overflow-hidden bg-[#0d3226] text-cream-50">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(220,195,144,0.14),transparent_28%),radial-gradient(circle_at_78%_18%,rgba(255,255,255,0.08),transparent_22%),linear-gradient(180deg,rgba(13,50,38,0.96),rgba(7,21,16,0.96))]" />
-          <div className="section-shell relative z-10 py-16 sm:py-20 lg:py-24">
+          <div className="section-shell page-hero-shell relative z-10">
             <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,0.55fr)_minmax(18rem,0.45fr)] lg:items-center lg:gap-14">
               <div className="max-w-2xl">
                 <span className="section-label border-white/14 bg-white/8 text-cream-50/82">

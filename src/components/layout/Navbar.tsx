@@ -14,6 +14,7 @@ import {
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 import { cn } from '@/lib/utils'
+import { routePreloaders } from '@/routes/routePreloaders'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -40,6 +41,12 @@ function NavItem({
     <NavLink
       to={to}
       onClick={onClick}
+      onMouseEnter={() => {
+        void routePreloaders[to]?.()
+      }}
+      onFocus={() => {
+        void routePreloaders[to]?.()
+      }}
       className={({ isActive }) =>
         cn(
           'rounded-full px-3 py-2 text-sm font-medium transition-all duration-200',
@@ -193,6 +200,12 @@ export function Navbar() {
                     key={l.to}
                     to={l.to}
                     className="rounded-[1.3rem] border border-white/15 bg-white/8 px-4 py-3 text-sm font-semibold text-cream-50 backdrop-blur sm:rounded-[1.6rem] sm:px-5 sm:text-base"
+                    onMouseEnter={() => {
+                      void routePreloaders[l.to]?.()
+                    }}
+                    onFocus={() => {
+                      void routePreloaders[l.to]?.()
+                    }}
                     onClick={() => setOpen(false)}
                   >
                     {l.label}

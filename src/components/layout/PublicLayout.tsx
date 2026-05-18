@@ -1,9 +1,9 @@
+import { Suspense } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { CookieConsent } from '@/components/layout/CookieConsent'
-import { useLenis } from '@/hooks/useLenis'
+import { scrollPageToHash, scrollPageToTop, useLenis } from '@/hooks/useLenis'
 import { LOCAL_ASSETS } from '@/constants/assets'
 import { api } from '@/lib/api'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
@@ -13,6 +13,26 @@ export function PublicLayout() {
   const location = useLocation()
   const applyWebsiteSettings = useSiteConfigStore((state) => state.applyWebsiteSettings)
   useLenis(true)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.history.scrollRestoration = 'manual'
+
+    if (location.hash) {
+      const frameId = window.requestAnimationFrame(() => scrollPageToHash(location.hash))
+
+      return () => window.cancelAnimationFrame(frameId)
+    }
+
+    scrollPageToTop()
+    const frameId = window.requestAnimationFrame(scrollPageToTop)
+    const timeoutId = window.setTimeout(scrollPageToTop, 60)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.clearTimeout(timeoutId)
+    }
+  }, [location.pathname, location.hash])
 
   useEffect(() => {
     let active = true
@@ -53,18 +73,17 @@ export function PublicLayout() {
         />
       </div>
       <Navbar />
-      <AnimatePresence mode="wait">
-        <motion.main
-          key={location.pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative z-[1]"
+      <main className="relative z-[1]">
+        <Suspense
+          fallback={
+            <div className="flex min-h-[40vh] items-center justify-center bg-transparent px-4">
+              <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
+            </div>
+          }
         >
-          <Outlet />
-        </motion.main>
-      </AnimatePresence>
+          <Outlet key={location.pathname} />
+        </Suspense>
+      </main>
       <Footer />
       <CookieConsent />
     </div>

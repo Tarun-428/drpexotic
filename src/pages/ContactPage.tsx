@@ -28,7 +28,7 @@ export default function ContactPage() {
               backgroundImage: `linear-gradient(180deg, rgba(8,24,18,0.22), rgba(8,24,18,0.84)), url(${LOCAL_ASSETS.orchardTeam})`,
             }}
           />
-          <div className="section-shell relative z-10 py-18 sm:py-24 lg:py-28">
+          <div className="section-shell page-hero-shell relative z-10">
             <div className="max-w-4xl">
               <span className="section-label border-white/14 bg-white/8 text-cream-50/82">
                 <MessageCircleMore className="size-4 text-gold-400" />

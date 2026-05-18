@@ -81,7 +81,7 @@ export default function ServicesPage() {
       />
 
       <div className="relative overflow-hidden">
-        <section className="section-shell py-8 sm:py-10 lg:py-14">
+        <section className="section-shell page-section-intro">
           <SectionReveal className="mb-8 max-w-4xl">
             <span className="section-label">
               <Leaf className="size-4 text-gold-600" />

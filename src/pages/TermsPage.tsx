@@ -33,7 +33,7 @@ export default function TermsPage() {
       />
 
       <div className="relative overflow-hidden">
-        <section className="section-shell py-14 sm:py-18 lg:py-24">
+        <section className="section-shell page-section-intro">
           <div className="max-w-4xl">
             <span className="section-label">Terms &amp; conditions</span>
             <h1 className="section-title mt-6 text-forest-900">Clear terms, presented with the same sense of care as every other page.</h1>

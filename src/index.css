@@ -275,6 +275,21 @@
     min-width: 0;
   }
 
+  .page-hero-shell {
+    padding-top: clamp(6.25rem, 9vw, 8.25rem);
+    padding-bottom: clamp(3.5rem, 6vw, 5.75rem);
+  }
+
+  .page-hero-shell--tall {
+    padding-top: clamp(6.5rem, 10vw, 8.75rem);
+    padding-bottom: clamp(4rem, 7vw, 6.25rem);
+  }
+
+  .page-section-intro {
+    padding-top: clamp(6rem, 8vw, 7.25rem);
+    padding-bottom: clamp(2.75rem, 5vw, 4.75rem);
+  }
+
   .section-label {
     display: inline-flex;
     align-items: center;
@@ -407,6 +422,13 @@
 
     .page-shell::after {
       display: none;
+    }
+
+    .page-hero-shell,
+    .page-hero-shell--tall,
+    .page-section-intro {
+      padding-top: clamp(5.6rem, 18vw, 6.6rem);
+      padding-bottom: clamp(2.25rem, 8vw, 3.5rem);
     }
   }
 

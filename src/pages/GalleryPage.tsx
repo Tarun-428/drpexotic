@@ -11,7 +11,7 @@ import type { GalleryItem } from '@/types/cms'
 export default function GalleryPage() {
   const [images, setImages] = useState<GalleryItem[]>(FALLBACK_GALLERY_ITEMS)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null)
+  const portalTarget = typeof document !== 'undefined' ? document.body : null
 
   const activeImage = activeIndex !== null ? images[activeIndex] : null
   const safeActiveIndex = activeIndex ?? 0
@@ -26,10 +26,6 @@ export default function GalleryPage() {
     ],
     [],
   )
-
-  useEffect(() => {
-    setPortalTarget(document.body)
-  }, [])
 
   useEffect(() => {
     let active = true
@@ -121,7 +117,7 @@ export default function GalleryPage() {
               backgroundImage: `linear-gradient(180deg, rgba(8,25,18,0.28), rgba(8,25,18,0.82)), url(${LOCAL_ASSETS.orchardNight})`,
             }}
           />
-          <div className="section-shell relative z-10 py-16 sm:py-20 lg:py-28">
+          <div className="section-shell page-hero-shell relative z-10">
             <div className="max-w-4xl">
               <span className="section-label border-white/14 bg-white/8 text-cream-50/82">
                 <Images className="size-4 text-gold-400" />

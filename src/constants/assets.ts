@@ -6,7 +6,6 @@ import dragonFruitHalvesUrl from '../../img/img5.jpg'
 import dragonFruitWholeUrl from '../../img/img6.jpg'
 import guavaUrl from '../../img/img7.jpg'
 import avocadoUrl from '../../img/img8.jpg'
-import orchardClipUrl from '../../img/clip.mp4'
 
 export const LOCAL_ASSETS = {
   orchardNight: orchardNightUrl,
@@ -17,7 +16,6 @@ export const LOCAL_ASSETS = {
   dragonFruitWhole: dragonFruitWholeUrl,
   guava: guavaUrl,
   avocado: avocadoUrl,
-  orchardClip: orchardClipUrl,
 } as const
 
 export const LOCAL_GALLERY_IMAGES = [
