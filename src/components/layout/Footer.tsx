@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
-import { ArrowUpRight, Sprout } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaWhatsapp, FaYoutube } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 import type { SiteConfig } from '@/types/siteConfig'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
+import BrandLogo from '../../../img/logo.svg'
 
 const socialPlatforms: Array<{ key: keyof SiteConfig['socialLinks']; label: string; Icon: IconType }> = [
   { key: 'instagram', label: 'Instagram', Icon: FaInstagram },
@@ -59,13 +60,24 @@ export function Footer() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
 
           {/* Brand */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <span className="flex size-8 items-center justify-center rounded-full border border-gold-500/28 bg-cream-200/8 text-gold-400">
-              <Sprout className="size-4" aria-hidden />
+          <div className="brand-lockup shrink-0">
+            <span className="brand-lockup__mark rounded-full bg-white p-1.5">
+              <img
+                src={BrandLogo}
+                alt={`${brandName} logo`}
+                className="brand-lockup__mark-logo"
+                decoding="async"
+              />
             </span>
-            <span className="font-display text-[1.1rem] leading-none tracking-[-0.02em] text-cream-50">
-              {brandName}
-            </span>
+            <div className="brand-lockup__text">
+              <span className="brand-lockup__name text-cream-50">
+                {brandName}
+                <sup>TM</sup>
+              </span>
+              <span className="brand-lockup__tagline text-cream-200/40">
+                Cinematic Orchard Estate
+              </span>
+            </div>
           </div>
 
           {/* Nav links */}
