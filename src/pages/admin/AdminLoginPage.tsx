@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import toast from 'react-hot-toast'
-import { ArrowUpRight, Shield } from 'lucide-react'
+import { ArrowRight, Shield } from 'lucide-react'
 import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -50,69 +50,40 @@ export default function AdminLoginPage() {
   return (
     <>
       <PageMeta title="Admin sign-in" description="Secure editorial access for DRP Exotic Farms." path="/admin/login" />
-      <div className="min-h-dvh bg-[radial-gradient(circle_at_top,rgba(200,169,107,0.14),transparent_22%),linear-gradient(180deg,#071b15,#06120f)] px-4 py-12 text-cream-50">
-        <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[minmax(0,1fr)_30rem] lg:items-center">
-          <div className="hidden lg:block">
-            <span className="section-label border-white/12 bg-white/8 text-cream-50/82">Editorial control room</span>
-            <h1 className="mt-6 font-display text-[clamp(3rem,5vw,5.7rem)] leading-[0.92] tracking-[-0.04em]">
-              Publish orchard stories and cinematic media with luxury-grade calm.
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-cream-50/72">
-              A secure content system for premium gallery management, editorial publishing, and media operations across the DRP brand ecosystem.
-            </p>
-          </div>
-
-          <div className="cinematic-surface rounded-[2.2rem] border border-white/8 bg-white/6 p-6 text-cream-50 shadow-[0_40px_120px_-70px_rgba(0,0,0,0.85)] sm:p-8">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex size-12 items-center justify-center rounded-[1.3rem] bg-gold-500 text-forest-900">
-                <Shield className="size-5" />
+      <div className="min-h-dvh bg-[#f6f8f3] px-4 py-10 text-zinc-950">
+        <div className="mx-auto flex min-h-[calc(100dvh-5rem)] max-w-xl items-center justify-center">
+          <div className="w-full rounded-[2rem] border border-zinc-200 bg-white p-6 shadow-[0_28px_80px_-55px_rgba(0,0,0,0.25)] sm:p-8">
+            <div className="flex justify-center">
+              <span className="inline-flex size-12 items-center justify-center rounded-2xl border border-emerald-100 bg-emerald-50 text-emerald-700">
+                <Shield className="size-5" aria-hidden />
               </span>
-              <div>
-                <h1 className="font-display text-3xl">Admin access</h1>
-                <p className="text-sm text-cream-50/60">JWT-protected cinematic CMS</p>
-              </div>
             </div>
 
             <form className="mt-8 grid gap-4" onSubmit={onSubmit}>
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-cream-50/74">
+                <Label htmlFor="email" className="sr-only">
                   Email
                 </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  className="border-white/12 bg-white/8 text-cream-50 placeholder:text-cream-50/35"
-                  {...form.register('email')}
-                />
-                {form.formState.errors.email?.message ? <p className="text-xs text-red-300">{form.formState.errors.email.message}</p> : null}
+                <Input id="email" type="email" autoComplete="email" className="admin-field" placeholder="" aria-label="Email" {...form.register('email')} />
+                {form.formState.errors.email?.message ? <p className="text-xs text-red-500">{form.formState.errors.email.message}</p> : null}
+                <div className="text-xs text-zinc-500">Use the admin email configured for this site.</div>
               </div>
 
               <div className="grid gap-2">
-                <Label htmlFor="password" className="text-cream-50/74">
+                <Label htmlFor="password" className="sr-only">
                   Password
                 </Label>
-                <Input
-                  id="password"
-                  type="password"
-                  autoComplete="current-password"
-                  className="border-white/12 bg-white/8 text-cream-50 placeholder:text-cream-50/35"
-                  {...form.register('password')}
-                />
-                {form.formState.errors.password?.message ? (
-                  <p className="text-xs text-red-300">{form.formState.errors.password.message}</p>
-                ) : null}
+                <Input id="password" type="password" autoComplete="current-password" className="admin-field" placeholder="" aria-label="Password" {...form.register('password')} />
+                {form.formState.errors.password?.message ? <p className="text-xs text-red-500">{form.formState.errors.password.message}</p> : null}
+                <div className="text-xs text-zinc-500">Passwords are case-sensitive. If you changed the admin password, use the new value.</div>
               </div>
 
-              <Button type="submit" disabled={busy} size="lg" className="mt-2 w-full">
-                {busy ? 'Signing in…' : 'Enter the CMS'}
-                {!busy ? <ArrowUpRight className="size-4" /> : null}
+              <Button type="submit" disabled={busy} size="lg" className="mt-2 w-full rounded-2xl">
+                {busy ? <span className="size-4 animate-pulse rounded-full border border-current border-r-transparent" aria-hidden /> : <ArrowRight className="size-4" aria-hidden />}
+                <span className="sr-only">Sign in</span>
               </Button>
+              <div className="mt-2 text-sm text-zinc-500">Tip: ensure the backend API is running if sign-in fails.</div>
             </form>
-
-            <div className="mt-6 rounded-[1.5rem] border border-white/8 bg-black/18 p-4 text-sm leading-relaxed text-cream-50/62">
-              Connect the FastAPI backend, MongoDB Atlas, and Cloudinary environment variables to enable secure publishing, media uploads, and live content delivery.
-            </div>
           </div>
         </div>
       </div>

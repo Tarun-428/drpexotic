@@ -62,7 +62,6 @@ export const AdminLoginPage = lazyRoute(() => import('@/pages/admin/AdminLoginPa
 export const AdminDashboardPage = lazyRoute(() => import('@/pages/admin/AdminDashboardPage'))
 export const AdminGalleryPage = lazyRoute(() => import('@/pages/admin/AdminGalleryPage'))
 export const AdminBlogsPage = lazyRoute(() => import('@/pages/admin/AdminBlogsPage'))
-export const AdminMediaPage = lazyRoute(() => import('@/pages/admin/AdminMediaPage'))
 export const AdminSettingsPage = lazyRoute(() => import('@/pages/admin/AdminSettingsPage'))
 
 export const routePreloaders: Record<string, () => Promise<unknown>> = {
@@ -79,7 +78,6 @@ export const routePreloaders: Record<string, () => Promise<unknown>> = {
   '/admin': AdminDashboardPage.preload,
   '/admin/gallery': AdminGalleryPage.preload,
   '/admin/blogs': AdminBlogsPage.preload,
-  '/admin/media': AdminMediaPage.preload,
   '/admin/settings': AdminSettingsPage.preload,
 }
 

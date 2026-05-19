@@ -1,20 +1,70 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { PenSquare, Plus, Send, Trash2, UploadCloud } from 'lucide-react'
-import { PageMeta } from '@/components/seo/PageMeta'
+import { PenSquare, Plus, Search, Send, Star, Trash2, UploadCloud, BookOpenText } from 'lucide-react'
+import { AdminPanel } from '@/components/admin/AdminShell'
 import { BlogComposer } from '@/components/admin/BlogComposer'
+import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
-import type { BlogPost, BlogPostListItem } from '@/types/cms'
+import type { BlogPost, BlogPostListItem, TaxonomyOption } from '@/types/cms'
+
+const blankPost = (): BlogPost => ({
+  id: 'new',
+  title: '',
+  slug: '',
+  short_description: '',
+  featured_image: {
+    title: '',
+    media_type: 'image',
+    url: '',
+    public_id: '',
+    caption: '',
+    alt_text: '',
+    width: null,
+    height: null,
+    duration: null,
+  },
+  content_blocks: [],
+  tags: [],
+  categories: [],
+  seo: {
+    meta_title: '',
+    meta_description: '',
+    canonical_url: null,
+  },
+  reading_time_minutes: 1,
+  status: 'draft',
+  is_featured: false,
+  author_id: '',
+  author_name: '',
+  published_at: null,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+})
+
+function statusTone(status: 'draft' | 'published') {
+  return status === 'published' ? 'success' : 'warning'
+}
+
+function slugify(input: string) {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
 
 export default function AdminBlogsPage() {
   const token = useAuthStore((state) => state.token)
   const [posts, setPosts] = useState<BlogPostListItem[]>([])
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
+  const [categories, setCategories] = useState<TaxonomyOption[]>([])
+  const [tags, setTags] = useState<TaxonomyOption[]>([])
   const [search, setSearch] = useState('')
+  const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'published'>('all')
   const [saving, setSaving] = useState(false)
   const [quickBlog, setQuickBlog] = useState({
     title: '',
@@ -26,13 +76,22 @@ export default function AdminBlogsPage() {
 
   const load = async () => {
     if (!token) return
-    const postsResponse = await api.listAdminBlogs(token, search ? { search } : undefined)
+    const [postsResponse, categoryOptions, tagOptions] = await Promise.all([
+      api.listAdminBlogs(token, {
+        search: search || undefined,
+        status: statusFilter === 'all' ? undefined : statusFilter,
+      }),
+      api.listCategories(token),
+      api.listTags(token),
+    ])
     setPosts(postsResponse.items)
+    setCategories(categoryOptions)
+    setTags(tagOptions)
   }
 
   useEffect(() => {
     void load()
-  }, [token, search])
+  }, [token, search, statusFilter])
 
   useEffect(() => {
     const saved = window.localStorage.getItem('drp-quick-blog-draft')
@@ -66,176 +125,77 @@ export default function AdminBlogsPage() {
     return () => URL.revokeObjectURL(url)
   }, [quickBlog.file])
 
+  const createTaxonomy = async (type: 'category' | 'tag', name: string) => {
+    if (!token) return
+    const payload = { name, slug: slugify(name) }
+    try {
+      const created = type === 'category' ? await api.createCategory(token, payload) : await api.createTag(token, payload)
+      if (type === 'category') {
+        setCategories((current) => [...current, created])
+      } else {
+        setTags((current) => [...current, created])
+      }
+      toast.success(`${type === 'category' ? 'Category' : 'Tag'} created.`)
+    } catch {
+      toast.error(`Could not create ${type}.`)
+    }
+  }
+
   return (
     <>
       <PageMeta title="Admin journal" description="Editorial publishing tools for DRP Exotic Farms." path="/admin/blogs" />
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-6 xl:grid-cols-[22rem_minmax(0,1fr)]">
-          <section className="space-y-5">
-            <div className="cinematic-surface rounded-[2rem] border border-white/8 bg-white/6 p-5 text-cream-50">
-              <div className="flex items-end justify-between gap-3">
-                <div>
-                  <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-gold-400">Journal archive</p>
-                  <h1 className="mt-2 font-display text-3xl">Published and draft stories</h1>
-                </div>
-                <Button type="button" size="sm" onClick={() => setSelectedPost(null)}>
-                  <Plus className="size-4" />
-                  New
-                </Button>
-              </div>
-              <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search stories" className="admin-field mt-4" />
-              <div className="mt-4 grid gap-3">
-                {posts.map((post) => (
-                  <article key={post.id} className="rounded-[1.5rem] border border-white/8 bg-black/18 p-4">
-                    <p className="text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-gold-400">{post.status}</p>
-                    <h2 className="mt-2 font-display text-2xl leading-none text-cream-50">{post.title}</h2>
-                    <p className="mt-2 text-sm leading-relaxed text-cream-50/64">{post.short_description}</p>
-                    <div className="mt-4 flex items-center justify-between gap-3">
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          if (!token) return
-                          const fullPost = await api.getAdminBlog(token, post.id)
-                          setSelectedPost(fullPost)
-                        }}
-                        className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-cream-50/76"
-                      >
-                        <PenSquare className="size-4" />
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        onClick={async () => {
-                          if (!token) return
-                          await api.deleteBlog(token, post.id)
-                          setPosts((current) => current.filter((item) => item.id !== post.id))
-                          if (selectedPost?.id === post.id) setSelectedPost(null)
-                          toast.success('Story deleted.')
-                        }}
-                        className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-red-300"
-                      >
-                        <Trash2 className="size-4" />
-                        Delete
-                      </button>
-                    </div>
-                  </article>
-                ))}
-              </div>
+        <div className="grid gap-4 xl:grid-cols-[20rem_minmax(0,1fr)]">
+          <AdminPanel className="flex flex-col gap-3 p-3">
+            <div className="text-sm text-zinc-600">Select a story to open and edit</div>
+            <div className="flex gap-2">
+              <Button type="button" variant="ghost" size="icon" className="size-11 shrink-0 rounded-2xl border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-950" onClick={() => void load()} aria-label="Refresh" title="Refresh">
+                <svg aria-hidden viewBox="0 0 24 24" className="size-4 fill-none stroke-current stroke-[1.75]">
+                  <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+                  <path d="M20 4v6h-6" />
+                </svg>
+              </Button>
+              <Button type="button" variant="ghost" size="icon" className="size-11 shrink-0 rounded-2xl border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-950" onClick={() => setSelectedPost(blankPost())} aria-label="New draft" title="New draft">
+                <Plus className="size-4" />
+              </Button>
             </div>
 
-          </section>
+            <div className="mt-2 flex flex-col gap-2 overflow-auto">
+              {posts.length === 0 ? (
+                <div className="text-sm text-zinc-500">No stories yet</div>
+              ) : (
+                posts.map((post) => (
+                  <button
+                    key={post.id}
+                    type="button"
+                    onClick={async () => {
+                      if (!token) return
+                      const fullPost = await api.getAdminBlog(token, post.id)
+                      setSelectedPost(fullPost)
+                    }}
+                    className="flex items-center gap-3 rounded-xl p-2 text-left hover:bg-zinc-50"
+                    title={post.title}
+                  >
+                    <img src={post.featured_image?.url || ''} alt={post.title} className="w-16 h-12 rounded object-cover bg-zinc-100" />
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium truncate text-zinc-800">{post.title || 'Untitled'}</div>
+                      <div className="text-xs text-zinc-500 truncate">{post.short_description}</div>
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          </AdminPanel>
 
           <section>
-            {!selectedPost ? (
-              <div className="cinematic-surface rounded-[2rem] border border-white/8 bg-white/6 p-5 text-cream-50 sm:p-6">
-                <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-gold-400">Quick publish</p>
-                    <h2 className="mt-2 font-display text-3xl">Write the story, upload one image, publish.</h2>
-                  </div>
-                  <Button
-                    type="button"
-                    disabled={saving || !token || !quickBlog.file || quickBlog.title.trim().length < 8 || quickBlog.shortDescription.trim().length < 20}
-                    onClick={async () => {
-                      if (!token || !quickBlog.file) return
-                      setSaving(true)
-                      try {
-                        const asset = await api.uploadMedia(token, {
-                          file: quickBlog.file,
-                          title: quickBlog.title,
-                          altText: quickBlog.title,
-                          description: quickBlog.shortDescription,
-                          mediaType: 'image',
-                          tags: ['journal'],
-                        })
-                        const content = quickBlog.content.trim() || quickBlog.shortDescription
-                        const saved = await api.createBlog(token, {
-                          title: quickBlog.title.trim(),
-                          slug: quickBlog.title.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''),
-                          short_description: quickBlog.shortDescription.trim(),
-                          featured_image: {
-                            title: asset.title,
-                            media_type: 'image',
-                            url: asset.secure_url,
-                            public_id: asset.public_id,
-                            caption: asset.description,
-                            alt_text: asset.alt_text,
-                            width: asset.width ?? null,
-                            height: asset.height ?? null,
-                            duration: null,
-                          },
-                          content_blocks: content.split(/\n{2,}/).map((text) => ({
-                            id: crypto.randomUUID(),
-                            type: 'paragraph',
-                            text: text.trim(),
-                            items: [],
-                            alignment: 'center',
-                          })),
-                          tags: [],
-                          categories: [],
-                          seo: {
-                            meta_title: quickBlog.title.trim(),
-                            meta_description: quickBlog.shortDescription.trim().slice(0, 160),
-                          },
-                          reading_time_minutes: Math.max(1, Math.ceil(content.split(/\s+/).filter(Boolean).length / 180)),
-                          status: 'published',
-                          is_featured: false,
-                        })
-                        toast.success('Story published.')
-                        window.localStorage.removeItem('drp-quick-blog-draft')
-                        setQuickBlog({ title: '', shortDescription: '', content: '', file: null, preview: '' })
-                        setSelectedPost(saved)
-                        await load()
-                      } catch {
-                        toast.error('Could not publish story.')
-                      } finally {
-                        setSaving(false)
-                      }
-                    }}
-                  >
-                    <Send className="size-4" />
-                    {saving ? 'Publishing...' : 'Publish now'}
-                  </Button>
-                </div>
-
-                <div className="mt-5 grid gap-4">
-                  <label
-                    onDragOver={(event) => event.preventDefault()}
-                    onDrop={(event) => {
-                      event.preventDefault()
-                      const file = event.dataTransfer.files[0]
-                      if (file?.type.startsWith('image/')) setQuickBlog((current) => ({ ...current, file }))
-                    }}
-                    className="flex min-h-[12rem] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-[1.5rem] border border-dashed border-white/16 bg-black/18 px-5 text-center transition hover:border-gold-400/45 hover:bg-black/24"
-                  >
-                    {quickBlog.preview ? (
-                      <img src={quickBlog.preview} alt="" className="h-52 w-full rounded-[1.15rem] object-cover" />
-                    ) : (
-                      <>
-                        <UploadCloud className="size-8 text-gold-400" />
-                        <p className="mt-3 text-sm text-cream-50/72">Drop a cover image here or tap to browse.</p>
-                      </>
-                    )}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      onChange={(event) => {
-                        const file = event.target.files?.[0]
-                        if (file) setQuickBlog((current) => ({ ...current, file }))
-                      }}
-                    />
-                  </label>
-                  <Input value={quickBlog.title} onChange={(event) => setQuickBlog((current) => ({ ...current, title: event.target.value }))} placeholder="Story title" className="admin-field" />
-                  <Textarea rows={3} value={quickBlog.shortDescription} onChange={(event) => setQuickBlog((current) => ({ ...current, shortDescription: event.target.value }))} placeholder="Short description" className="admin-field min-h-[7rem]" />
-                  <Textarea rows={8} value={quickBlog.content} onChange={(event) => setQuickBlog((current) => ({ ...current, content: event.target.value }))} placeholder="Write the article. Use blank lines for paragraph breaks." className="admin-field min-h-[14rem]" />
-                  <p className="text-xs text-cream-50/48">Autosaved on this device while you type.</p>
-                </div>
-              </div>
-            ) : (
+            {selectedPost ? (
               <BlogComposer
                 initialPost={selectedPost}
                 busy={saving}
+                categories={categories}
+                tags={tags}
+                onCreateCategory={(name) => createTaxonomy('category', name)}
+                onCreateTag={(name) => createTaxonomy('tag', name)}
                 onUploadImage={(file, details) => {
                   if (!token) throw new Error('Missing token')
                   return api.uploadMedia(token, {
@@ -251,8 +211,9 @@ export default function AdminBlogsPage() {
                   if (!token) return
                   setSaving(true)
                   try {
-                    const saved = selectedPost ? await api.updateBlog(token, selectedPost.id, payload) : await api.createBlog(token, payload)
-                    toast.success(selectedPost ? 'Story updated.' : 'Story created.')
+                    const saved =
+                      selectedPost.id === 'new' ? await api.createBlog(token, payload) : await api.updateBlog(token, selectedPost.id, payload)
+                    toast.success(selectedPost.id === 'new' ? 'Story created.' : 'Story updated.')
                     setSelectedPost(saved)
                     await load()
                   } catch {
@@ -262,6 +223,13 @@ export default function AdminBlogsPage() {
                   }
                 }}
               />
+            ) : (
+              <AdminPanel className="grid min-h-[32rem] place-items-center p-6">
+                <Button type="button" onClick={() => setSelectedPost(blankPost())} className="size-12 rounded-2xl">
+                  <Plus className="size-4" />
+                  <span className="sr-only">Open editor</span>
+                </Button>
+              </AdminPanel>
             )}
           </section>
         </div>

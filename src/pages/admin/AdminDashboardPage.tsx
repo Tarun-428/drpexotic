@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { BookOpenText, Images, Settings } from 'lucide-react'
+import { BarChart3, BookOpenText, GalleryHorizontalEnd, Settings } from 'lucide-react'
+import { AdminPanel } from '@/components/admin/AdminShell'
 import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
 import { api } from '@/lib/api'
@@ -16,6 +17,11 @@ const emptyOverview: DashboardOverview = {
 export default function AdminDashboardPage() {
   const token = useAuthStore((state) => state.token)
   const [overview, setOverview] = useState<DashboardOverview>(emptyOverview)
+  const shortcuts = [
+    { to: '/admin/gallery', label: 'Gallery', icon: GalleryHorizontalEnd },
+    { to: '/admin/blogs', label: 'Journal', icon: BookOpenText },
+    { to: '/admin/settings', label: 'Settings', icon: Settings },
+  ] as const
 
   useEffect(() => {
     if (!token) return
@@ -26,64 +32,36 @@ export default function AdminDashboardPage() {
     <>
       <PageMeta title="Admin overview" description="Operational overview for the DRP cinematic CMS." path="/admin" />
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <span className="section-label border-white/10 bg-white/8 text-cream-50/82">Dashboard</span>
-          <h1 className="mt-5 font-display text-[clamp(2.6rem,4vw,4.5rem)] leading-[0.94] tracking-[-0.04em] text-cream-50">
-            A premium control room for media, galleries, and editorial publishing.
-          </h1>
-        </div>
-
+        <div className="mb-4 text-sm text-zinc-600">Overview metrics and quick shortcuts — click any item to open that section.</div>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {overview.stats.map((stat) => (
-            <div key={stat.label} className="cinematic-surface rounded-[1.9rem] border border-white/8 bg-white/6 p-5 text-cream-50">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-gold-400">{stat.label}</p>
-              <p className="mt-4 font-display text-5xl leading-none">{stat.value}</p>
-            </div>
-          ))}
-        </div>
+          {overview.stats.map((stat, index) => {
+            const icons = [BarChart3, GalleryHorizontalEnd, BookOpenText, Settings] as const
+            const Icon = icons[index % icons.length]
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {[
-            { to: '/admin/gallery', label: 'Quick publish gallery', body: 'Drop media, add title, publish instantly.', icon: Images },
-            { to: '/admin/blogs', label: 'Quick publish story', body: 'Cover image, summary, article, publish.', icon: BookOpenText },
-            { to: '/admin/settings', label: 'Website settings', body: 'Update WhatsApp, contact, map, and footer.', icon: Settings },
-          ].map((action) => {
-            const Icon = action.icon
             return (
-              <div key={action.to} className="cinematic-surface rounded-[1.7rem] border border-white/8 bg-white/6 p-5 text-cream-50">
-                <Icon className="size-5 text-gold-400" />
-                <h2 className="mt-3 font-display text-2xl leading-none">{action.label}</h2>
-                <p className="mt-2 text-sm leading-relaxed text-cream-50/62">{action.body}</p>
-                <Button asChild size="sm" className="mt-4">
-                  <Link to={action.to}>Open</Link>
-                </Button>
-              </div>
+              <AdminPanel key={stat.label} className="admin-metric-card flex min-h-44 flex-col justify-between p-5">
+                <div className="flex items-center justify-between">
+                  <Icon className="size-5 text-emerald-600" aria-hidden />
+                  <div className="text-sm text-zinc-600">{stat.label}</div>
+                </div>
+                <p className="mt-6 font-display text-5xl leading-none text-zinc-950">{stat.value}</p>
+              </AdminPanel>
             )
           })}
         </div>
 
-        <div className="mt-6 grid gap-5 lg:grid-cols-2">
-          <section className="cinematic-surface rounded-[2rem] border border-white/8 bg-white/6 p-5 text-cream-50">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-gold-400">Latest journal activity</p>
-            <div className="mt-4 grid gap-3">
-              {overview.latest_blog_titles.map((title) => (
-                <div key={title} className="rounded-[1.4rem] bg-black/18 px-4 py-3 text-sm text-cream-50/76">
-                  {title}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="cinematic-surface rounded-[2rem] border border-white/8 bg-white/6 p-5 text-cream-50">
-            <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-gold-400">Latest gallery activity</p>
-            <div className="mt-4 grid gap-3">
-              {overview.latest_gallery_titles.map((title) => (
-                <div key={title} className="rounded-[1.4rem] bg-black/18 px-4 py-3 text-sm text-cream-50/76">
-                  {title}
-                </div>
-              ))}
-            </div>
-          </section>
+        <div className="mt-4 flex flex-wrap gap-3">
+          {shortcuts.map((shortcut) => {
+            const Icon = shortcut.icon
+            return (
+              <Link key={shortcut.to} to={shortcut.to} className="flex flex-col items-center gap-2">
+                <span className="inline-flex size-11 items-center justify-center rounded-2xl border border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-950">
+                  <Icon className="size-4" aria-hidden />
+                </span>
+                <span className="text-xs text-zinc-700">{shortcut.label}</span>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </>

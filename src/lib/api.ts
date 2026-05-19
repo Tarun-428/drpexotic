@@ -131,8 +131,10 @@ export const api = {
   updateAdminSettings(token: string, payload: Partial<WebsiteSettings>) {
     return request<WebsiteSettings>('/admin/settings', { method: 'PUT', token, json: payload })
   },
-  listMedia(token: string) {
-    return request<PaginationResponse<MediaAsset>>('/admin/media?page=1&page_size=60', { token })
+  listMedia(token: string, params?: { mediaType?: 'image' | 'video' }) {
+    const query = new URLSearchParams({ page: '1', page_size: '60' })
+    if (params?.mediaType) query.set('media_type', params.mediaType)
+    return request<PaginationResponse<MediaAsset>>(`/admin/media?${query.toString()}`, { token })
   },
   uploadMedia(
     token: string,

@@ -9,7 +9,6 @@ import {
   AdminDashboardPage,
   AdminGalleryPage,
   AdminLoginPage,
-  AdminMediaPage,
   AdminSettingsPage,
   AboutPage,
   BlogPage,
@@ -68,7 +67,6 @@ export default function App() {
             <Route index element={<AdminDashboardPage />} />
             <Route path="gallery" element={<AdminGalleryPage />} />
             <Route path="blogs" element={<AdminBlogsPage />} />
-            <Route path="media" element={<AdminMediaPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
           </Route>
         </Route>
