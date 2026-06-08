@@ -196,7 +196,7 @@ export function PremiumSplash({ onHandoffStart, setIntroComplete }: PremiumSplas
 
         {/* Brand Reveal */}
         <div ref={brandTextRef} className="mt-12 text-center select-none">
-          <h1 className="text-4xl md:text-5xl font-serif text-[#C8A96B] tracking-[0.25em] uppercase drop-shadow-sm">
+          <h1 className="text-4xl md:text-5xl font-display text-[#C8A96B] tracking-[0.25em] uppercase drop-shadow-sm">
             DRP Exotic Farms
           </h1>
           <p className="mt-4 text-xs md:text-sm text-[#D4C3A3] tracking-[0.5em] uppercase font-light opacity-80">
