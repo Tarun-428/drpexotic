@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowUpRight, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { LOCAL_ASSETS } from '@/constants/assets'
 import BrandLogo from '../../../img/logo.svg'
 import {
   Dialog,
@@ -30,12 +28,10 @@ function NavItem({
   to,
   label,
   onClick,
-  isTransparent,
 }: {
   to: string
   label: string
   onClick?: () => void
-  isTransparent?: boolean
 }) {
   return (
     <NavLink
@@ -49,10 +45,10 @@ function NavItem({
       }}
       className={({ isActive }) =>
         cn(
-          'rounded-full px-3 py-2 text-sm font-medium transition-all duration-200',
-          isTransparent
-            ? cn('text-cream-50/92 hover:text-cream-50', isActive && 'bg-white/10 text-cream-50')
-            : cn('text-forest-900/80 hover:text-forest-900', isActive && 'bg-cream-300/70 text-forest-900'),
+          'rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200',
+          isActive
+            ? 'bg-primary text-neutral'
+            : 'text-primary/70 hover:text-primary hover:bg-secondary/50',
         )
       }
     >
@@ -67,178 +63,87 @@ export function Navbar() {
   const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
   const wa = buildWhatsAppUrl(
     whatsapp,
-    'Hello Drpexoticfarms — I would like guidance on produce / orchard services.',
+    'Hello DRP Exotic Farms, I am looking for agricultural consultancy services.',
   )
 
   useEffect(() => {
-    let ticking = false
     const onScroll = () => {
-      if (ticking) return
-      ticking = true
-      requestAnimationFrame(() => {
-        setScrolled(window.scrollY > 18)
-        ticking = false
-      })
+      setScrolled(window.scrollY > 20)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  // Lock body scroll when mobile menu is open to avoid background scroll conflicts
-  useEffect(() => {
-    const { body, documentElement } = document
-    if (!open) {
-      body.style.overflow = ''
-      documentElement.style.overflow = ''
-      body.style.paddingRight = ''
-      return
-    }
-
-    const scrollY = window.scrollY
-    const prev = {
-      overflow: body.style.overflow,
-      htmlOverflow: documentElement.style.overflow,
-      paddingRight: body.style.paddingRight,
-    }
-
-    const scrollbarWidth = window.innerWidth - documentElement.clientWidth
-    body.style.overflow = 'hidden'
-    documentElement.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`
-
-    return () => {
-      body.style.overflow = prev.overflow
-      documentElement.style.overflow = prev.htmlOverflow
-      body.style.paddingRight = prev.paddingRight
-      window.scrollTo(0, scrollY)
-    }
-  }, [open])
 
   return (
     <header
       className={cn(
-        // Fixed overlay so navbar does not push content down and sits above hero images
-        'fixed inset-x-0 top-0 z-40 px-3 sm:px-4 transition-colors duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] pointer-events-auto',
-        scrolled
-          ? 'backdrop-blur-sm bg-black/20 border-b border-white/8 shadow-[0_10px_30px_-18px_rgba(2,6,23,0.6)]'
-          : 'bg-transparent',
+        'fixed inset-x-0 top-0 z-50 transition-all duration-300 py-4',
+        scrolled ? 'bg-neutral/80 backdrop-blur-md border-b border-primary/5 py-3 shadow-sm' : 'bg-transparent'
       )}
-      aria-hidden={false}
     >
-      <div
-        className={cn(
-          'cinematic-surface header-glass mx-auto flex max-w-[min(100%,96rem)] items-center justify-between rounded-full px-3',
-          scrolled ? 'h-[3.8rem] sm:h-[4.0rem] lg:px-5' : 'h-[3.9rem] sm:h-[4.2rem] lg:px-5',
-        )}
-      >
-        <Link to="/" className="brand-lockup group" aria-label="Drpexoticfarms home">
-          <span className="brand-lockup__mark" data-intro-logo-target>
-            <img src={BrandLogo} alt="" className="brand-lockup__mark-logo" aria-hidden="true" decoding="async" />
-          </span>
-          <div className="brand-lockup__text">
-            <span
-              className={cn('brand-lockup__name transition-all duration-300',
-                !scrolled ? 'text-cream-50 drop-shadow-[0_6px_18px_rgba(0,0,0,0.45)]' : 'text-cream-50')}
-            >
-              Drpexoticfarms<sup>TM</sup>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-3 group" aria-label="DRP Exotic Farms home">
+          <div data-intro-logo-target className="h-12 w-12 bg-neutral rounded-xl flex items-center justify-center overflow-hidden transition-transform group-hover:scale-105">
+            <img src={BrandLogo} alt="DRP Logo" className="h-full w-full object-contain" />
+          </div>
+          <div className="flex flex-col">
+            <span className={cn('font-display text-xl font-bold leading-none transition-colors', scrolled ? 'text-primary' : 'text-neutral')}>
+              DRP Exotic Farms
             </span>
-            <span className="brand-lockup__tagline">Cinematic Orchard Estate</span>
+            <span className={cn('text-[0.6rem] uppercase tracking-[0.2em] font-bold mt-1 transition-colors', scrolled ? 'text-primary/50' : 'text-neutral/50')}>
+              Agricultural Consultancy
+            </span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-1 xl:flex" aria-label="Primary">
+        <nav className="hidden xl:flex items-center gap-2 bg-secondary/30 p-1 rounded-full border border-primary/5">
           {links.map((l) => (
-            <NavItem key={l.to} to={l.to} label={l.label} isTransparent={!scrolled} />
+            <NavItem key={l.to} to={l.to} label={l.label} />
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 xl:flex">
+        <div className="hidden xl:flex items-center gap-3">
           <Button asChild variant="secondary" size="sm">
-            <a href={wa} target="_blank" rel="noreferrer">
-              WhatsApp
-            </a>
+            <a href={wa} target="_blank" rel="noreferrer">WhatsApp</a>
           </Button>
-          <Button asChild size="sm" className="shadow-[0_14px_30px_-18px_rgba(11,61,46,0.75)]">
-            <Link to="/contact" className="inline-flex items-center gap-2">
-              Plan a visit
-              <ArrowUpRight className="size-4" />
-            </Link>
+          <Button asChild size="sm">
+            <Link to="/contact">Book Consultation</Link>
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 xl:hidden">
+        <div className="xl:hidden">
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button variant="secondary" size="icon" aria-label="Open menu" className="rounded-full">
-                <motion.span
-                  animate={{ rotate: open ? 90 : 0, scale: open ? 1.05 : 1 }}
-                  transition={{ type: 'spring', stiffness: 260, damping: 18 }}
-                  className="inline-flex"
-                >
-                  <Menu className={cn('size-5 transition-colors duration-200', !scrolled ? 'text-cream-50' : 'text-forest-900')} />
-                </motion.span>
+              <Button variant="secondary" size="icon" className="rounded-xl">
+                <Menu className={cn('size-5', scrolled ? 'text-primary' : 'text-neutral')} />
               </Button>
             </DialogTrigger>
-            <DialogSheet
-              className="h-[56dvh] max-h-[62dvh] overflow-y-auto overscroll-contain hide-scrollbar rounded-b-[2.1rem] border-white/10 bg-cover bg-center p-5 text-cream-50 shadow-[0_24px_80px_-40px_rgba(0,0,0,0.6)] backdrop-blur-sm transition duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sm:rounded-b-[2.5rem] sm:p-8"
-              style={{
-                backgroundImage: `linear-gradient(180deg, rgba(11,61,46,0.92), rgba(27,135,103,0.5)), url(${LOCAL_ASSETS.dragonFruitRows})`,
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <DialogTitle className="font-display text-3xl">Menu</DialogTitle>
-              </div>
-              <div>
-                <p className="max-w-xs text-sm leading-relaxed text-cream-50/72">
-                  Explore the estate, orchard programmes, signature produce, and the people shaping the farm.
-                </p>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
+            <DialogSheet className="bg-neutral p-8 border-l border-primary/5">
+              <DialogTitle className="text-3xl font-display text-primary mb-8">Menu</DialogTitle>
+              <nav className="grid gap-4 mb-8">
                 {links.map((l) => (
                   <Link
                     key={l.to}
                     to={l.to}
-                    className="rounded-[1.3rem] border border-white/15 bg-white/8 px-4 py-3 text-sm font-semibold text-cream-50 backdrop-blur sm:rounded-[1.6rem] sm:px-5 sm:text-base"
-                    onMouseEnter={() => {
-                      void routePreloaders[l.to]?.()
-                    }}
-                    onFocus={() => {
-                      void routePreloaders[l.to]?.()
-                    }}
                     onClick={() => setOpen(false)}
+                    className="text-2xl font-display text-primary/70 hover:text-primary transition-colors"
                   >
                     {l.label}
                   </Link>
                 ))}
-              </div>
-              <div className="mt-auto grid gap-2">
-                <Button asChild>
-                  <Link to="/contact" onClick={() => setOpen(false)} className="inline-flex items-center gap-2">
-                    Contact
-                    <ArrowUpRight className="size-4" />
-                  </Link>
+              </nav>
+              <div className="grid gap-4">
+                <Button asChild className="w-full">
+                  <Link to="/contact" onClick={() => setOpen(false)}>Book Consultation</Link>
                 </Button>
-                <Button asChild variant="secondary">
-                  <a href={wa} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>
-                    WhatsApp
-                  </a>
+                <Button asChild variant="secondary" className="w-full">
+                  <a href={wa} target="_blank" rel="noreferrer">WhatsApp</a>
                 </Button>
               </div>
             </DialogSheet>
           </Dialog>
         </div>
       </div>
-
-      <AnimatePresence>
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-10 bottom-0 h-px rounded-full bg-gradient-to-r from-transparent via-gold-500/70 to-transparent"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        />
-      </AnimatePresence>
     </header>
   )
 }

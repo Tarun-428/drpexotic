@@ -12,7 +12,7 @@ export const AccordionItem = React.forwardRef<
   <AccordionPrimitive.Item
     ref={ref}
     className={cn(
-      'overflow-hidden rounded-[1.2rem] border border-white/22 bg-white/60 px-4 shadow-[0_16px_44px_-30px_rgba(11,61,46,0.3)] backdrop-blur lg:rounded-[1.6rem] lg:px-5',
+      'overflow-hidden rounded-2xl border border-primary/5 bg-white px-4 shadow-sm lg:px-6',
       className,
     )}
     {...props}
@@ -28,13 +28,13 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'flex flex-1 items-center justify-between gap-4 py-3.5 text-left text-[0.96rem] font-semibold text-forest-900 transition-all hover:text-gold-600 [&[data-state=open]>svg]:rotate-180 lg:gap-5 lg:py-5 lg:text-lg',
+        'flex flex-1 items-center justify-between gap-4 py-4 text-left text-sm sm:text-base font-semibold text-primary transition-all hover:text-accent [&[data-state=open]>svg]:rotate-180 lg:gap-6 lg:py-6 lg:text-lg',
         className,
       )}
       {...props}
     >
       {children}
-      <ChevronDown className="size-5 shrink-0 text-gold-600 transition-transform duration-300" />
+      <ChevronDown className="size-5 shrink-0 text-accent transition-transform duration-300" />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))
@@ -46,10 +46,10 @@ export const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className="overflow-hidden text-sm leading-relaxed text-forest-900/72 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
+    className="overflow-hidden text-sm leading-relaxed text-primary/70 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
-    <div className={cn('pb-3.5 pt-0 lg:pb-5', className)}>{children}</div>
+    <div className={cn('pb-4 pt-0 lg:pb-6', className)}>{children}</div>
   </AccordionPrimitive.Content>
 ))
 AccordionContent.displayName = AccordionPrimitive.Content.displayName

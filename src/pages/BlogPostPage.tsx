@@ -47,7 +47,7 @@ export default function BlogPostPage() {
   if (!post) {
     return (
       <div className="section-shell py-24">
-        <div className="cinematic-surface rounded-[2rem] p-8 text-center text-forest-900/72">Loading story…</div>
+        <div className="rounded-[2rem] border border-primary/10 bg-white p-8 text-center text-primary/70 shadow-sm">Loading story...</div>
       </div>
     )
   }
@@ -59,23 +59,23 @@ export default function BlogPostPage() {
       <PageMeta title={post.seo.meta_title} description={post.seo.meta_description} path={`/journal/${post.slug}`} />
 
       <article className="relative overflow-hidden">
-        <section className="relative isolate overflow-hidden bg-[#0f3025] text-cream-50">
+        <section className="relative isolate overflow-hidden bg-primary text-neutral">
           <img
             src={post.featured_image.url}
             alt={post.featured_image.alt_text || post.title}
-            className="absolute inset-0 h-full w-full object-cover opacity-30"
+            className="absolute inset-0 h-full w-full object-cover opacity-35"
           />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,24,18,0.26),rgba(7,24,18,0.86))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,24,18,0.72),rgba(7,24,18,0.92))]" />
           <div className="section-shell page-hero-shell relative z-10">
-            <Link to="/journal" className="inline-flex items-center gap-2 text-sm font-semibold text-cream-50/82">
+            <Link to="/journal" className="inline-flex items-center gap-2 text-sm font-semibold text-neutral/90 transition hover:text-accent">
               <ArrowLeft className="size-4" />
               Back to journal
             </Link>
             <div className="mt-8 max-w-4xl">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-gold-400">{formatDate(post.published_at)}</p>
-              <h1 className="editorial-title mt-5 text-cream-50">{post.title}</h1>
-              <p className="mt-5 max-w-3xl text-base leading-relaxed text-cream-50/76 sm:text-lg">{post.short_description}</p>
-              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-cream-50/76">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-accent">{formatDate(post.published_at)}</p>
+              <h1 className="mt-5 max-w-5xl font-display text-[clamp(2.3rem,5vw,5rem)] leading-[1.02] text-neutral">{post.title}</h1>
+              <p className="mt-5 max-w-3xl text-base leading-relaxed text-neutral/86 sm:text-lg">{post.short_description}</p>
+              <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-neutral/82">
                 <span>{post.author_name}</span>
                 <span className="inline-flex items-center gap-1.5">
                   <Clock3 className="size-4" />
@@ -102,7 +102,7 @@ export default function BlogPostPage() {
                   }
                   if (shareUrl) void navigator.clipboard.writeText(shareUrl)
                 }}
-                className="inline-flex size-12 items-center justify-center rounded-full border border-forest-900/10 bg-white/80 text-forest-900 shadow-[0_18px_44px_-28px_rgba(11,61,46,0.4)] backdrop-blur transition hover:-translate-y-0.5"
+                className="inline-flex size-12 items-center justify-center rounded-full border border-primary/15 bg-white text-primary shadow-[0_18px_44px_-28px_rgba(11,61,46,0.4)] transition hover:-translate-y-0.5 hover:border-accent/60"
                 aria-label="Share article"
               >
                 <Share2 className="size-4" />
@@ -116,12 +116,12 @@ export default function BlogPostPage() {
             <div className="flex items-end justify-between gap-4">
               <div>
                 <span className="section-label">Related reading</span>
-                <h2 className="section-title mt-5 text-forest-900">Continue through the orchard journal.</h2>
+                <h2 className="section-title mt-5 max-w-3xl">Continue through the orchard journal.</h2>
               </div>
             </div>
-            <div className="responsive-card-row mt-8 gap-5 lg:grid-cols-3">
+            <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {related.map((item) => (
-                <BlogCard key={item.id} post={item} />
+                <BlogCard key={item.id} post={item} compact />
               ))}
             </div>
           </section>

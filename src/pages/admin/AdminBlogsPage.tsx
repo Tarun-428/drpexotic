@@ -1,12 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import toast from 'react-hot-toast'
-import { PenSquare, Plus, Search, Send, Star, Trash2, UploadCloud, BookOpenText } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { AdminPanel } from '@/components/admin/AdminShell'
 import { BlogComposer } from '@/components/admin/BlogComposer'
 import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 import { api } from '@/lib/api'
 import { useAuthStore } from '@/store/authStore'
 import type { BlogPost, BlogPostListItem, TaxonomyOption } from '@/types/cms'
@@ -45,10 +43,6 @@ const blankPost = (): BlogPost => ({
   updated_at: new Date().toISOString(),
 })
 
-function statusTone(status: 'draft' | 'published') {
-  return status === 'published' ? 'success' : 'warning'
-}
-
 function slugify(input: string) {
   return input
     .toLowerCase()
@@ -63,67 +57,27 @@ export default function AdminBlogsPage() {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null)
   const [categories, setCategories] = useState<TaxonomyOption[]>([])
   const [tags, setTags] = useState<TaxonomyOption[]>([])
-  const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'all' | 'draft' | 'published'>('all')
   const [saving, setSaving] = useState(false)
-  const [quickBlog, setQuickBlog] = useState({
-    title: '',
-    shortDescription: '',
-    content: '',
-    file: null as File | null,
-    preview: '',
-  })
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!token) return
-    const [postsResponse, categoryOptions, tagOptions] = await Promise.all([
-      api.listAdminBlogs(token, {
-        search: search || undefined,
-        status: statusFilter === 'all' ? undefined : statusFilter,
-      }),
-      api.listCategories(token),
-      api.listTags(token),
-    ])
-    setPosts(postsResponse.items)
-    setCategories(categoryOptions)
-    setTags(tagOptions)
-  }
+    try {
+      const [postsResponse, categoryOptions, tagOptions] = await Promise.all([
+        api.listAdminBlogs(token),
+        api.listCategories(token),
+        api.listTags(token),
+      ])
+      setPosts(postsResponse.items)
+      setCategories(categoryOptions)
+      setTags(tagOptions)
+    } catch {
+      toast.error('Could not load blog data.')
+    }
+  }, [token])
 
   useEffect(() => {
     void load()
-  }, [token, search, statusFilter])
-
-  useEffect(() => {
-    const saved = window.localStorage.getItem('drp-quick-blog-draft')
-    if (!saved) return
-    try {
-      const parsed = JSON.parse(saved) as Pick<typeof quickBlog, 'title' | 'shortDescription' | 'content'>
-      setQuickBlog((current) => ({ ...current, ...parsed }))
-    } catch {
-      window.localStorage.removeItem('drp-quick-blog-draft')
-    }
-  }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(
-      'drp-quick-blog-draft',
-      JSON.stringify({
-        title: quickBlog.title,
-        shortDescription: quickBlog.shortDescription,
-        content: quickBlog.content,
-      }),
-    )
-  }, [quickBlog.title, quickBlog.shortDescription, quickBlog.content])
-
-  useEffect(() => {
-    if (!quickBlog.file) {
-      setQuickBlog((current) => (current.preview ? { ...current, preview: '' } : current))
-      return
-    }
-    const url = URL.createObjectURL(quickBlog.file)
-    setQuickBlog((current) => ({ ...current, preview: url }))
-    return () => URL.revokeObjectURL(url)
-  }, [quickBlog.file])
+  }, [load])
 
   const createTaxonomy = async (type: 'category' | 'tag', name: string) => {
     if (!token) return

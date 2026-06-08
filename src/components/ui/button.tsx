@@ -4,21 +4,21 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'btn-luxe inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 focus-visible:ring-offset-2 focus-visible:ring-offset-cream-200 hover:-translate-y-0.5 active:translate-y-0 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
         primary:
-          'bg-gradient-to-r from-gold-600 to-gold-500 text-forest-900 shadow-glow hover:brightness-105 hover:shadow-[0_18px_50px_-30px_rgba(11,61,46,0.6)] active:scale-[0.98]',
+          'border border-accent/45 bg-primary text-neutral shadow-[0_12px_28px_-16px_rgba(23,72,54,0.9),inset_0_1px_0_rgba(255,255,255,0.14)] hover:border-accent/75 hover:bg-primary/95 hover:scale-[1.02] hover:shadow-[0_18px_36px_-18px_rgba(23,72,54,0.95)]',
         secondary:
-          'border border-gold-500/50 bg-cream-50/70 text-forest-900 backdrop-blur hover:border-gold-500 hover:bg-cream-50/95 hover:shadow-[0_16px_46px_-32px_rgba(11,61,46,0.55)]',
-        ghost: 'text-forest-900 hover:bg-cream-300/60',
-        danger: 'bg-red-700 text-white hover:bg-red-800',
+          'border border-primary/25 bg-neutral text-primary shadow-[0_10px_24px_-18px_rgba(23,72,54,0.8),inset_0_1px_0_rgba(255,255,255,0.7)] hover:border-accent/70 hover:bg-secondary hover:scale-[1.02] hover:shadow-[0_16px_32px_-20px_rgba(23,72,54,0.85)]',
+        ghost: 'border border-transparent text-primary hover:border-primary/15 hover:bg-secondary/60 hover:shadow-sm',
+        danger: 'border border-red-900/20 bg-red-700 text-white shadow-[0_12px_28px_-18px_rgba(185,28,28,0.9)] hover:bg-red-800',
       },
       size: {
-        default: 'h-11 px-6',
+        default: 'h-11 px-8',
         sm: 'h-9 px-4 text-xs',
-        lg: 'h-12 px-8 text-base',
+        lg: 'h-14 px-10 text-base',
         icon: 'h-10 w-10',
       },
     },

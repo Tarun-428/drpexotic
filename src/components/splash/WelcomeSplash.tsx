@@ -41,12 +41,9 @@ export function WelcomeSplash({ readyToExit, onAnimationReady, onComplete }: Wel
         transition={{ duration: 2.4, ease: logoEase }}
       />
 
-      <motion.img
-        src={Logo}
-        alt="DRP Exotic Farms"
-        className="relative z-10 h-auto w-[min(64vw,17rem)] max-w-[17rem] select-none sm:w-[min(42vw,20rem)] sm:max-w-[20rem] lg:w-[min(28vw,22rem)] lg:max-w-[22rem]"
+      <motion.div
+        className="relative z-10 h-auto w-[min(64vw,17rem)] max-w-[17rem] select-none sm:w-[min(42vw,20rem)] sm:max-w-[20rem] lg:w-[min(28vw,22rem)] lg:max-w-[22rem] bg-neutral rounded-3xl p-4 overflow-hidden"
         draggable={false}
-        decoding="async"
         initial={prefersReducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9, y: 10 }}
         animate={
           prefersReducedMotion
@@ -66,7 +63,15 @@ export function WelcomeSplash({ readyToExit, onAnimationReady, onComplete }: Wel
           transformOrigin: '50% 50%',
           willChange: 'transform, opacity',
         }}
-      />
+      >
+        <img
+          src={Logo}
+          alt="DRP Exotic Farms"
+          className="h-full w-full object-contain"
+          draggable={false}
+          decoding="async"
+        />
+      </motion.div>
     </motion.div>
   )
 }

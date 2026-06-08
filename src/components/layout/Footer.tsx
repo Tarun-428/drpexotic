@@ -6,6 +6,7 @@ import type { IconType } from 'react-icons'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 import type { SiteConfig } from '@/types/siteConfig'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
+import { Button } from '@/components/ui/button'
 import BrandLogo from '../../../img/logo.svg'
 
 const socialPlatforms: Array<{ key: keyof SiteConfig['socialLinks']; label: string; Icon: IconType }> = [
@@ -24,8 +25,11 @@ const navLinks = [
   { label: 'Gallery', to: '/gallery' },
   { label: 'Journal', to: '/journal' },
   { label: 'Contact', to: '/contact' },
-  { label: 'Privacy', to: '/privacy' },
-  { label: 'Terms', to: '/terms' },
+]
+
+const legalLinks = [
+  { label: 'Privacy Policy', to: '/privacy' },
+  { label: 'Terms of Service', to: '/terms' },
 ]
 
 export function Footer() {
@@ -35,7 +39,7 @@ export function Footer() {
 
   const wa = buildWhatsAppUrl(
     whatsapp,
-    'Hello Drpexoticfarms — I would like to enquire about the farm experience and produce.',
+    'Hello DRP Exotic Farms, I am interested in your agricultural consultancy services.',
   )
 
   const visibleSocials = socialPlatforms.flatMap(({ key, label, Icon }) => {
@@ -44,85 +48,82 @@ export function Footer() {
   })
 
   return (
-    <footer className="relative overflow-hidden border-t border-white/8 bg-forest-900 text-cream-200">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse 60% 80% at 10% 50%, rgba(200,169,107,0.08) 0%, transparent 60%), radial-gradient(ellipse 50% 80% at 90% 50%, rgba(90,143,99,0.09) 0%, transparent 60%)',
-        }}
-      />
-
-      <div className="section-shell relative z-10 px-5 py-8 sm:px-6">
-
-        {/* ── Single row: brand | nav | socials | cta ── */}
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-
-          {/* Brand */}
-          <div className="brand-lockup shrink-0">
-            <span className="brand-lockup__mark rounded-full bg-white p-1.5">
-              <img
-                src={BrandLogo}
-                alt={`${brandName} logo`}
-                className="brand-lockup__mark-logo"
-                decoding="async"
-              />
-            </span>
-            <div className="brand-lockup__text">
-              <span className="brand-lockup__name text-cream-50">
-                {brandName}
-                <sup>TM</sup>
-              </span>
-              <span className="brand-lockup__tagline text-cream-200/40">
-                Cinematic Orchard Estate
-              </span>
+    <footer className="border-t-4 border-accent/55 bg-primary text-neutral shadow-[inset_0_18px_0_rgba(253,250,244,0.06)] py-16 sm:py-24">
+      <div className="section-shell">
+        <div className="grid lg:grid-cols-2 gap-16 mb-16">
+          <div>
+            <Link to="/" className="flex items-center gap-3 mb-8" aria-label="DRP Exotic Farms home">
+              <div className="h-12 w-12 bg-neutral rounded-xl flex items-center justify-center overflow-hidden">
+                <img src={BrandLogo} alt="DRP Logo" className="h-full w-full object-contain" />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-display text-2xl font-bold leading-none">
+                  {brandName}
+                  <sup>TM</sup>
+                </span>
+                <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold mt-1 text-neutral/50">
+                  Agricultural Consultancy
+                </span>
+              </div>
+            </Link>
+            <p className="text-neutral/70 max-w-sm mb-8 leading-relaxed">
+              Pioneering sustainable and profitable exotic fruit farming in India through expert consultancy, scientific management, and market support.
+            </p>
+            <div className="flex items-center gap-4">
+              {visibleSocials.map(({ key, label, Icon, url }) => (
+                <a
+                  key={key}
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="text-neutral/50 hover:text-accent transition-colors"
+                >
+                  <Icon className="size-5" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Nav links */}
-          <nav className="flex flex-wrap gap-x-5 gap-y-2">
-            {navLinks.map(({ label, to }) => (
-              <Link
-                key={to}
-                to={to}
-                className="text-[0.76rem] text-cream-200/52 transition-colors duration-150 hover:text-cream-50"
-              >
+          <div className="grid sm:grid-cols-2 gap-8">
+            <div>
+              <h4 className="font-bold uppercase tracking-widest text-xs mb-6 text-accent">Quick Links</h4>
+              <nav className="grid gap-4">
+                {navLinks.map(({ label, to }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    className="text-neutral/70 hover:text-neutral transition-colors"
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+            <div>
+              <h4 className="font-bold uppercase tracking-widest text-xs mb-6 text-accent">Get Started</h4>
+              <p className="text-neutral/70 mb-6 text-sm">
+                Ready to build your profitable orchard? Book a consultation today.
+              </p>
+              <Button asChild size="sm" className="w-full sm:w-auto">
+                <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                  Book Consultation
+                  <ArrowUpRight className="size-4" />
+                </a>
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-8 border-t border-neutral/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral/40">
+          <p>© {new Date().getFullYear()} {brandName}™. All rights reserved.</p>
+          <nav className="flex items-center gap-6">
+            {legalLinks.map(({ label, to }) => (
+              <Link key={to} to={to} className="hover:text-neutral transition-colors">
                 {label}
               </Link>
             ))}
           </nav>
-
-          {/* Socials + CTA */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            {visibleSocials.map(({ key, label, Icon, url }) => (
-              <a
-                key={key}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={label}
-                className="flex size-8 items-center justify-center rounded-full border border-cream-200/12 bg-white/5 text-cream-200/55 transition-all duration-200 hover:border-gold-400/38 hover:bg-gold-400/10 hover:text-gold-300"
-              >
-                <Icon className="size-3.5" aria-hidden />
-              </a>
-            ))}
-            <a
-              href={wa}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-1 inline-flex h-8 items-center gap-1.5 rounded-full border border-gold-500/35 bg-gold-400/10 px-3.5 text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-gold-300 transition-all duration-200 hover:bg-gold-400/18 hover:text-gold-200"
-            >
-              Chat
-              <ArrowUpRight className="size-3" />
-            </a>
-          </div>
-        </div>
-
-        {/* ── Bottom bar ── */}
-        <div className="mt-6 flex flex-col gap-1.5 border-t border-white/8 pt-5 text-[0.68rem] text-cream-200/36 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Drpexoticfarms™. All rights reserved.</p>
-          <p>Packaged online sales are planned. Subscribers will hear first.</p>
         </div>
       </div>
     </footer>

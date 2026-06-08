@@ -3,8 +3,8 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { CookieConsent } from '@/components/layout/CookieConsent'
+import { VisitPrompt } from '@/components/layout/VisitPrompt'
 import { scrollPageToHash, scrollPageToTop, useLenis } from '@/hooks/useLenis'
-import { LOCAL_ASSETS } from '@/constants/assets'
 import { api } from '@/lib/api'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 import { useEffect } from 'react'
@@ -20,7 +20,6 @@ export function PublicLayout() {
 
     if (location.hash) {
       const frameId = window.requestAnimationFrame(() => scrollPageToHash(location.hash))
-
       return () => window.cancelAnimationFrame(frameId)
     }
 
@@ -48,36 +47,13 @@ export function PublicLayout() {
   }, [applyWebsiteSettings])
 
   return (
-    <div className="page-shell min-h-dvh bg-cream-100">
-      <div className="site-field-fill" aria-hidden="true">
-        <img
-          src={LOCAL_ASSETS.dragonFruitRows}
-          alt=""
-          className="site-field-fill__image site-field-fill__image--left"
-          loading="lazy"
-          decoding="async"
-        />
-        <img
-          src={LOCAL_ASSETS.guava}
-          alt=""
-          className="site-field-fill__image site-field-fill__image--right"
-          loading="lazy"
-          decoding="async"
-        />
-        <img
-          src={LOCAL_ASSETS.avocado}
-          alt=""
-          className="site-field-fill__image site-field-fill__image--bottom"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
+    <div className="min-h-screen bg-neutral">
       <Navbar />
-      <main className="relative z-[1]">
+      <main className="relative">
         <Suspense
           fallback={
             <div className="flex min-h-[40vh] items-center justify-center bg-transparent px-4">
-              <div className="h-12 w-12 animate-spin rounded-full border-2 border-gold-500 border-t-transparent" />
+              <div className="h-12 w-12 animate-spin rounded-full border-2 border-accent border-t-transparent" />
             </div>
           }
         >
@@ -85,6 +61,7 @@ export function PublicLayout() {
         </Suspense>
       </main>
       <Footer />
+      <VisitPrompt />
       <CookieConsent />
     </div>
   )

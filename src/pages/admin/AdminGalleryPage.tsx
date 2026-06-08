@@ -13,7 +13,6 @@ import type { GalleryItem } from '@/types/cms'
 export default function AdminGalleryPage() {
   const token = useAuthStore((state) => state.token)
   const [items, setItems] = useState<GalleryItem[]>([])
-  const [mediaAssets, setMediaAssets] = useState<string[]>([])
   const [quickFile, setQuickFile] = useState<File | null>(null)
   const [quickPreview, setQuickPreview] = useState('')
   const [busy, setBusy] = useState(false)

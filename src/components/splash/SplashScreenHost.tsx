@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { IntroAnimation } from './IntroAnimation'
+import { PremiumSplash } from './PremiumSplash'
 import { preloadCriticalAssets, warmPublicRoutes } from '@/routes/routePreloaders'
 
 type SplashScreenHostProps = {
@@ -29,7 +29,7 @@ export function SplashScreenHost({ children }: SplashScreenHostProps) {
   }, [])
 
   return (
-    <div className="relative min-h-dvh overflow-x-hidden bg-cream-200">
+    <div className="relative min-h-dvh overflow-x-hidden bg-neutral">
       <motion.div
         aria-hidden={!handoffStarted}
         inert={!splashComplete}
@@ -45,7 +45,7 @@ export function SplashScreenHost({ children }: SplashScreenHostProps) {
         {children}
       </motion.div>
 
-      {!splashComplete ? <IntroAnimation onHandoffStart={beginHandoff} setIntroComplete={dismissSplash} /> : null}
+      {!splashComplete ? <PremiumSplash onHandoffStart={beginHandoff} setIntroComplete={dismissSplash} /> : null}
     </div>
   )
 }

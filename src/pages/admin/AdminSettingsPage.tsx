@@ -126,7 +126,7 @@ export default function AdminSettingsPage() {
                 </div>
                 <div>
                   <label className="text-sm text-zinc-700">Secondary CTA URL</label>
-                  <Input value={settings.hero_cta_links.secondary_url} onChange={(event) => setSettings((s) => ({ ...s, hero_cta_links: { ...s, hero_cta_links, secondary_url: event.target.value } }))} aria-label="Secondary URL" className="admin-field" />
+                  <Input value={settings.hero_cta_links.secondary_url} onChange={(event) => setSettings((s) => ({ ...s, hero_cta_links: { ...s.hero_cta_links, secondary_url: event.target.value } }))} aria-label="Secondary URL" className="admin-field" />
                 </div>
               </div>
             </div>

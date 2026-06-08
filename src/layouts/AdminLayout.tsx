@@ -1,6 +1,5 @@
 import { Link, NavLink, Outlet } from 'react-router-dom'
-import { BarChart3, BookOpenText, GalleryHorizontalEnd, LayoutGrid, LogOut, Settings, Shield } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { BarChart3, BookOpenText, LayoutGrid, LogOut, Settings, Shield } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/authStore'
 

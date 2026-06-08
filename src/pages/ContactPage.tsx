@@ -8,135 +8,125 @@ import { LOCAL_ASSETS } from '@/constants/assets'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 
+const fadeIn = {
+  initial: { opacity: 0, y: 20 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true },
+  transition: { duration: 0.6, ease: 'easeOut' },
+} as const
+
 export default function ContactPage() {
   const contact = useSiteConfigStore((s) => s.config.contact)
-  const wa = buildWhatsAppUrl(contact.whatsappE164, 'Hello Drpexoticfarms — I would like to get in touch.')
+  const wa = buildWhatsAppUrl(contact.whatsappE164, 'Hello DRP Exotic Farms, I would like to get in touch.')
 
   return (
     <>
       <PageMeta
-        title="Contact & location"
-        description="Reach DRP Exotic Farms for produce sourcing, orchard programmes, and partnerships through a premium contact experience."
+        title="Contact Us | DRP Exotic Farms"
+        description="Reach out to DRP Exotic Farms for orchard consultancy, premium produce sourcing, or partnership inquiries."
         path="/contact"
       />
 
-      <div className="relative overflow-hidden">
-        <section className="relative isolate overflow-hidden bg-[#0f2f24] text-cream-50">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{
-              backgroundImage: `linear-gradient(180deg, rgba(8,24,18,0.22), rgba(8,24,18,0.84)), url(${LOCAL_ASSETS.orchardTeam})`,
-            }}
-          />
-          <div className="section-shell page-hero-shell relative z-10">
-            <div className="max-w-4xl">
-              <span className="section-label border-white/14 bg-white/8 text-cream-50/82">
-                <MessageCircleMore className="size-4 text-gold-400" />
-                Contact
-              </span>
-              <h1 className="editorial-title mt-6 max-w-5xl text-cream-50">
-                We are here to help you.
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-relaxed text-cream-50/74 sm:text-lg lg:mt-6 lg:text-xl">
-                Let's discuss how we can work together.
-              </p>
-            </div>
-          </div>
-        </section>
+      {/* HERO SECTION - Unified treatment */}
+      <section className="bg-primary pt-32 pb-20 text-neutral relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img src={LOCAL_ASSETS.orchardTeam} alt="" className="w-full h-full object-cover opacity-10" />
+        </div>
+        <div className="section-shell relative z-10">
+          <motion.div {...fadeIn} className="max-w-3xl">
+            <span className="section-label border-neutral/20 bg-neutral/10 text-neutral gap-2">
+              <MessageCircleMore className="size-4 text-accent" />
+              Get in Touch
+            </span>
+            <h1 className="text-4xl sm:text-6xl font-display leading-tight mt-6 mb-6">
+              We are here to <span className="text-accent">help you.</span>
+            </h1>
+            <p className="text-lg text-neutral/80 leading-relaxed">
+              Have questions about exotic fruit farming or sourcing? Our team is ready to discuss how we can work together.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-        <section className="section-shell py-14 sm:py-18 lg:py-24">
-          <div className="grid gap-8 lg:grid-cols-12 lg:gap-10">
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.99 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.18 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:col-span-7"
-            >
-              <ContactForm />
+      <section className="section-shell">
+        <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr]">
+          {/* Contact Form */}
+          <motion.div {...fadeIn}>
+            <ContactForm />
+          </motion.div>
+
+          {/* Contact Details */}
+          <div className="space-y-8">
+            <motion.div {...fadeIn} transition={{ delay: 0.1 }} className="premium-card !bg-secondary/30 border-none">
+              <span className="section-label bg-white/50 border-primary/5 mb-6">
+                <Sparkles className="size-4 text-accent" />
+                Direct Channels
+              </span>
+              
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="size-10 bg-primary rounded-full flex items-center justify-center text-accent shrink-0">
+                    <Mail className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-[0.6rem] font-bold uppercase tracking-widest text-primary/40 mb-1">Email</p>
+                    <a href={`mailto:${contact.email}`} className="text-base font-bold text-primary hover:text-accent transition-colors break-all">
+                      {contact.email}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="size-10 bg-primary rounded-full flex items-center justify-center text-accent shrink-0">
+                    <Phone className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-[0.6rem] font-bold uppercase tracking-widest text-primary/40 mb-1">Phone</p>
+                    <a href={`tel:${contact.phoneTel}`} className="text-base font-bold text-primary hover:text-accent transition-colors">
+                      {contact.phoneDisplay}
+                    </a>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4">
+                  <div className="size-10 bg-primary rounded-full flex items-center justify-center text-accent shrink-0">
+                    <MapPin className="size-5" />
+                  </div>
+                  <div>
+                    <p className="text-[0.6rem] font-bold uppercase tracking-widest text-primary/40 mb-1">Location</p>
+                    <ul className="text-sm font-medium text-primary/70 leading-relaxed">
+                      {contact.addressLines.map((line, idx) => (
+                        <li key={idx}>{line}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Button asChild size="lg" className="btn-primary flex-1 sm:flex-none">
+                  <a href={wa} target="_blank" rel="noreferrer">WhatsApp</a>
+                </Button>
+                <Button asChild size="lg" variant="secondary" className="btn-secondary flex-1 sm:flex-none">
+                  <a href={`mailto:${contact.email}`}>Send Email</a>
+                </Button>
+              </div>
             </motion.div>
 
-            <div className="responsive-stack-grid gap-5 lg:col-span-5">
-              <motion.div
-                initial={{ opacity: 0, y: 24, scale: 0.99 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.18 }}
-                transition={{ duration: 0.8, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-                className="cinematic-surface rounded-[2rem] p-6"
-              >
-                <span className="section-label">
-                  <Sparkles className="size-4 text-gold-600" />
-                  Direct lines
-                </span>
-                <div className="mt-6 grid gap-4">
-                  <div className="flex items-start gap-4">
-                    <span className="inline-flex size-11 items-center justify-center rounded-full bg-forest-900 text-gold-400">
-                      <Mail className="size-5" aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-forest-900/48">Email</p>
-                      <a className="mt-2 block break-words text-base font-semibold text-forest-900 hover:underline" href={`mailto:${contact.email}`}>
-                        {contact.email}
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <span className="inline-flex size-11 items-center justify-center rounded-full bg-forest-900 text-gold-400">
-                      <Phone className="size-5" aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-forest-900/48">Phone</p>
-                      <a className="mt-2 block text-base font-semibold text-forest-900 hover:underline" href={`tel:${contact.phoneTel}`}>
-                        {contact.phoneDisplay}
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-4">
-                    <span className="inline-flex size-11 items-center justify-center rounded-full bg-forest-900 text-gold-400">
-                      <MapPin className="size-5" aria-hidden />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.32em] text-forest-900/48">Address</p>
-                      <ul className="mt-2 space-y-1 text-sm leading-relaxed text-forest-900/70">
-                        {contact.addressLines.map((line, index) => (
-                          <li key={`${line}-${index}`}>{line}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Button asChild size="sm">
-                    <a href={wa} target="_blank" rel="noreferrer">
-                      WhatsApp
-                    </a>
-                  </Button>
-                  <Button asChild size="sm" variant="secondary">
-                    <a href={`mailto:${contact.email}`}>Email us</a>
-                  </Button>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 24, scale: 0.99 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.18 }}
-                transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                className="grid gap-5"
-              >
-                <MapEmbed title="DRP Exotic Farms location map" />
-                <div className="cinematic-surface rounded-[1.8rem] p-5">
-                  <p className="font-display text-3xl leading-none text-forest-900">Visit feeling</p>
-                  <p className="mt-3 text-sm leading-relaxed text-forest-900/70">
-                    Visits should feel immersive and intentional. Share context before arriving so the farm can tailor
-                    the conversation to your sourcing, orchard, or partnership interest.
-                  </p>
-                </div>
-              </motion.div>
-            </div>
+            <motion.div {...fadeIn} transition={{ delay: 0.2 }} className="space-y-6">
+              <div className="rounded-3xl overflow-hidden shadow-xl border border-primary/5 aspect-video sm:aspect-auto sm:h-[300px]">
+                <MapEmbed title="DRP Exotic Farms Location" />
+              </div>
+              <div className="premium-card !bg-primary text-neutral p-8">
+                <h3 className="text-2xl font-display mb-4 text-accent">Farm Visits</h3>
+                <p className="text-sm text-neutral/70 leading-relaxed">
+                  Visits are by appointment only. Please contact us in advance so we can prepare to host you and tailor the conversation to your specific agricultural interests.
+                </p>
+              </div>
+            </motion.div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </>
   )
 }

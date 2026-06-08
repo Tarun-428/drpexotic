@@ -13,7 +13,7 @@ export function BlogContentRenderer({ blocks }: { blocks: BlogContentBlock[] }) 
         if (block.type === 'heading') {
           const HeadingTag = block.level === 3 ? 'h3' : block.level === 4 ? 'h4' : 'h2'
           return (
-            <HeadingTag key={block.id} className="font-display text-[clamp(1.7rem,3vw,2.8rem)] leading-[0.98] text-forest-900">
+            <HeadingTag key={block.id} className="font-display text-[clamp(1.7rem,3vw,2.8rem)] leading-[1.02] text-primary">
               {block.text}
             </HeadingTag>
           )
@@ -21,7 +21,7 @@ export function BlogContentRenderer({ blocks }: { blocks: BlogContentBlock[] }) 
 
         if (block.type === 'quote') {
           return (
-            <blockquote key={block.id} className="rounded-[1.8rem] border border-gold-500/16 bg-white/55 px-6 py-6 font-display text-[clamp(1.6rem,2.5vw,2.4rem)] leading-[1.05] text-forest-900/90 shadow-[0_24px_80px_-48px_rgba(11,61,46,0.35)]">
+            <blockquote key={block.id} className="rounded-[1.8rem] border border-accent/25 bg-white px-6 py-6 font-display text-[clamp(1.6rem,2.5vw,2.4rem)] leading-[1.08] text-primary shadow-[0_24px_80px_-48px_rgba(11,61,46,0.35)]">
               “{block.text}”
             </blockquote>
           )
@@ -31,7 +31,7 @@ export function BlogContentRenderer({ blocks }: { blocks: BlogContentBlock[] }) 
           return (
             <ul key={block.id} className="grid gap-3">
               {block.items.map((item, index) => (
-                <li key={`${item}-${index}`} className="rounded-[1.3rem] bg-white/58 px-4 py-3 text-base leading-relaxed text-forest-900/76">
+                <li key={`${item}-${index}`} className="rounded-[1.3rem] bg-white px-4 py-3 text-base leading-relaxed text-primary/76 shadow-sm">
                   {item}
                 </li>
               ))}
@@ -63,12 +63,12 @@ export function BlogContentRenderer({ blocks }: { blocks: BlogContentBlock[] }) 
                     className="max-h-[24rem] w-full bg-[#091a14] object-cover"
                   />
                 )}
-                <span className="absolute right-3 top-3 inline-flex size-10 items-center justify-center rounded-full border border-white/18 bg-black/28 text-cream-50 backdrop-blur transition group-hover:bg-black/42">
+                <span className="absolute right-3 top-3 inline-flex size-10 items-center justify-center rounded-full border border-white/18 bg-black/28 text-neutral backdrop-blur transition group-hover:bg-black/42">
                   <Expand className="size-4" />
                 </span>
               </button>
               {(block.media.caption || block.media.title) && (
-                <figcaption className="px-2 pt-2 text-sm leading-relaxed text-forest-900/58">
+                <figcaption className="px-2 pt-2 text-sm leading-relaxed text-primary/58">
                   {block.media.caption || block.media.title}
                 </figcaption>
               )}
@@ -77,7 +77,7 @@ export function BlogContentRenderer({ blocks }: { blocks: BlogContentBlock[] }) 
         }
 
         return (
-          <p key={block.id} className="text-[1.02rem] leading-[1.95] text-forest-900/76 sm:text-[1.08rem]">
+          <p key={block.id} className="text-[1.02rem] leading-[1.95] text-primary/78 sm:text-[1.08rem]">
             {block.text}
           </p>
         )
@@ -91,7 +91,7 @@ export function BlogContentRenderer({ blocks }: { blocks: BlogContentBlock[] }) 
                 <button
                   type="button"
                   onClick={() => setActiveMedia(null)}
-                  className="absolute right-3 top-3 z-10 inline-flex size-10 items-center justify-center rounded-full border border-white/16 bg-black/38 text-cream-50 backdrop-blur"
+                  className="absolute right-3 top-3 z-10 inline-flex size-10 items-center justify-center rounded-full border border-white/16 bg-black/38 text-neutral backdrop-blur"
                   aria-label="Close media preview"
                 >
                   <X className="size-4" />
