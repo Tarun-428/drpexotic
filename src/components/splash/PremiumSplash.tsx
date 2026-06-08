@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { gsap } from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -49,10 +49,9 @@ export function PremiumSplash({ onHandoffStart, setIntroComplete }: PremiumSplas
 
     const timeline = gsap.timeline();
 
-    // --- Scene 1: Dark to Light ---
-    gsap.set(containerRef.current, { backgroundColor: '#1a2e1a' });
+    // Reset brand text position
     gsap.set(brandTextRef.current, { opacity: 0, y: 20 });
-    
+
     // Initial state for paths
     pathsRef.current.forEach((path) => {
       if (path) {
@@ -64,89 +63,48 @@ export function PremiumSplash({ onHandoffStart, setIntroComplete }: PremiumSplas
           stroke: '#C8A96B',
           strokeWidth: 2,
           opacity: 0,
-          scale: 0.95,
+          scale: 0.9,
           transformOrigin: 'center'
         });
       }
     });
 
-    // Animation Sequence
+    // Animation Sequence: Long Artistic Draw + Fast Settle/Handoff
     timeline
-      .to(containerRef.current, { 
-        duration: 1.5, 
-        backgroundColor: '#1a2e1a', 
-        ease: 'power2.inOut' 
-      })
-
-      // --- Scene 2 & 3: Logo Draw Reveal & Organic Growth ---
+      // 1. Logo Draw Reveal (Deliberate & Understandable - The same long duration as before)
       .addLabel('logoReveal')
-      .to(pathsRef.current[0], { 
+      .to(pathsRef.current[0], { // Farmer
         opacity: 1,
         strokeDashoffset: 0,
-        duration: 2,
+        duration: 2.0, // Restored to 2 seconds
         ease: 'power1.inOut'
       }, 'logoReveal')
-      .to(pathsRef.current.slice(1), { 
+      .to(pathsRef.current.slice(1), { // Leaves and details
         opacity: 1,
         strokeDashoffset: 0,
-        duration: 1.5,
-        stagger: 0.2,
+        duration: 1.5, // Restored to 1.5 seconds
+        stagger: 0.2, // Restored stagger
         ease: 'power1.inOut'
-      }, 'logoReveal+=0.8')
+      }, 'logoReveal+=0.6') // Overlap slightly with farmer draw
 
+      // 2. Settle & Brand Reveal (Fast & Efficient)
       .to(pathsRef.current, {
         fill: '#498A41',
         strokeWidth: 0,
-        duration: 1,
+        scale: 1,
+        duration: 0.4, // Fast settle
         ease: 'power2.inOut'
-      }, '-=0.5')
-      
-      .to(pathsRef.current, {
-        scale: 1,
-        duration: 1.2,
-        ease: 'elastic.out(1, 0.5)',
-      }, '-=0.8')
-
-      // --- Scene 4: Golden Light Sweep ---
-      .addLabel('lightSweep')
-      .to(pathsRef.current, {
-        filter: 'brightness(1.5) drop-shadow(0 0 15px rgba(200, 169, 107, 0.6))',
-        duration: 0.6,
-        ease: 'power2.inOut',
-        yoyo: true,
-        repeat: 1
-      }, 'lightSweep')
-
-      // --- Scene 5: Star Falling Effect ---
-      .addLabel('starFalling')
-      .call(() => {
-        createFallingParticles();
-      }, null, 'starFalling')
-
-      // --- Scene 6: Orchard Success Moment ---
-      .to(svgRef.current, {
-        scale: 1.05,
-        duration: 1.2,
-        ease: 'power2.out',
-      }, 'starFalling+=0.5')
-      .to(svgRef.current, {
-        scale: 1,
-        duration: 0.8,
-        ease: 'power2.inOut',
-      })
-
-      // --- Scene 7: Brand Reveal ---
+      }, '-=0.2')
       .to(brandTextRef.current, {
         opacity: 1,
         y: 0,
-        duration: 1.2,
+        duration: 0.5, // Fast text reveal
         ease: 'power3.out'
-      }, '-=0.5')
+      }, '-=0.1')
 
-      // --- Scene 8: Website Transition (Handoff) ---
-      .addLabel('handoff', '+=1')
+      // 3. Website Transition (Handoff) - Fast Handoff
+      .addLabel('handoff', '+=0.4')
       .call(() => {
-        // Calculate handoff parameters
         const target = document.querySelector<HTMLElement>('[data-intro-logo-target]');
         const logoBounds = logoWrapperRef.current?.getBoundingClientRect();
         const targetBounds = target?.getBoundingClientRect();
@@ -161,56 +119,29 @@ export function PremiumSplash({ onHandoffStart, setIntroComplete }: PremiumSplas
             y: handoffY,
             scale: handoffScale,
             opacity: 0,
-            duration: 1.2,
+            duration: 0.7, // Fast handoff
             ease: 'power3.inOut'
           });
           
           gsap.to(brandTextRef.current, {
             opacity: 0,
-            y: -20,
-            duration: 0.8,
-            ease: 'power3.in'
+            y: -10,
+            duration: 0.4,
+            ease: 'power2.in'
           });
         }
         
         onHandoffStart();
-      }, null, 'handoff')
+      }, [], 'handoff')
       
       .to(containerRef.current, {
         opacity: 0,
-        duration: 1.5,
+        duration: 0.6,
         ease: 'power2.inOut',
         onComplete: () => setIntroComplete(true)
-      }, 'handoff+=0.2');
+      }, 'handoff+=0.1');
 
   }, { scope: containerRef });
-
-  const createFallingParticles = () => {
-    if (!particlesRef.current) return;
-    
-    const colors = ['#C8A96B', '#E5D1A4', '#FFD700'];
-    for (let i = 0; i < 40; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'absolute rounded-full';
-      const size = Math.random() * 3 + 1;
-      particle.style.width = `${size}px`;
-      particle.style.height = `${size}px`;
-      particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      particle.style.left = `${50 + (Math.random() - 0.5) * 30}%`;
-      particle.style.top = '20%';
-      particle.style.filter = 'blur(0.5px) drop-shadow(0 0 3px gold)';
-      particlesRef.current.appendChild(particle);
-
-      gsap.to(particle, {
-        x: (Math.random() - 0.5) * 300,
-        y: window.innerHeight * 0.6,
-        opacity: 0,
-        duration: 2 + Math.random() * 2,
-        ease: 'power1.inOut',
-        onComplete: () => particle.remove()
-      });
-    }
-  };
 
   return (
     <div 
@@ -255,7 +186,7 @@ export function PremiumSplash({ onHandoffStart, setIntroComplete }: PremiumSplas
             {logoPaths.map((p, i) => (
               <path
                 key={p.id}
-                ref={(el) => (pathsRef.current[i] = el)}
+                ref={(el) => { pathsRef.current[i] = el; }}
                 d={p.d}
                 transform={p.transform}
               />
