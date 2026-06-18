@@ -1,11 +1,9 @@
 import { motion } from 'framer-motion'
 import { PageMeta } from '@/components/seo/PageMeta'
-import { LOCAL_ASSETS } from '@/constants/assets'
+import { CLIENT_ASSETS } from '@/constants/assets'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
-import { useSiteConfigStore } from '@/store/siteConfigStore'
-import { buildWhatsAppUrl } from '@/utils/whatsapp'
-import { CheckCircle2, Award, Briefcase, Zap, Users } from 'lucide-react'
+import { CheckCircle2, Award, Briefcase, Zap, History, Target, TrendingUp, Heart, Users } from 'lucide-react'
 import { FlipCard } from '@/components/ui/FlipCard'
 
 const fadeIn = {
@@ -16,128 +14,77 @@ const fadeIn = {
 } as const
 
 const milestones = [
-  { year: '2019', title: 'Founding', desc: 'Started with a vision to modernize exotic farming.' },
-  { year: '2021', title: 'Expansion', desc: 'Developed multiple commercial orchards across states.' },
-  { year: '2024', title: 'Scale', desc: 'Managing 100+ acres with scientific protocols.' },
+  { year: '2011', title: 'Foundation', desc: 'The journey began with a single vision to modernize Indian agriculture.' },
+  { year: '2013', title: 'First Orchard', desc: 'Successfully developed our first commercial dragon fruit orchard project.' },
+  { year: '2016', title: 'Exotic Expansion', desc: 'Diversified into multiple exotic varieties including Avocado and Guava.' },
+  { year: '2018', title: 'Farmer Network', desc: 'Launched our grower support program to help farmers scale successfully.' },
+  { year: '2022', title: 'Large Scale Projects', desc: 'Managing 100+ acres of scientific orchard projects across the region.' },
+  { year: '2026', title: 'DRP Today', desc: 'A leading name in exotic farming, empowering the next generation of growers.' },
 ]
 
-const team = [
-  { name: 'Sunil Mehra', role: 'Operations Head', image: LOCAL_ASSETS.dragonFruitRows },
-  { name: 'Anita Rao', role: 'Crop Specialist', image: LOCAL_ASSETS.avocado },
-  { name: 'Rajesh Kumar', role: 'Logistics Lead', image: LOCAL_ASSETS.dragonFruitCut },
+const visionaries = [
+  {
+    name: 'Dharmesh Patel',
+    role: 'Founder',
+    intro: 'Visionary behind DRP, dedicated to agricultural excellence.',
+    image: CLIENT_ASSETS.founder,
+    description: 'With deep roots in agriculture and a vision for innovation, Dharmesh leads the strategic direction and orchard development at DRP Exotic Farms.',
+    icons: [<Zap key="zap" className="size-5 text-accent" />, <Award key="award" className="size-5 text-accent" />]
+  },
+  {
+    name: 'Prakash Patel',
+    role: 'Co-Founder',
+    intro: 'Operations expert ensuring every orchard meets global standards.',
+    image: CLIENT_ASSETS.cofounder,
+    description: 'Prakash brings decades of technical expertise in soil management and irrigation systems, ensuring every grower achieves maximum yield.',
+    icons: [<Briefcase key="briefcase" className="size-5 text-accent" />, <Target key="target" className="size-5 text-accent" />]
+  },
+  {
+    name: 'DRP Field Team',
+    role: 'Grower Guidance',
+    intro: 'Hands-on field support for every stage of orchard development.',
+    image: CLIENT_ASSETS.consultationRoom,
+    description: 'The DRP field team connects planning, plantation, crop observation, and market readiness so growers receive practical support on the ground.',
+    icons: [<Users key="users" className="size-5 text-accent" />, <TrendingUp key="trending" className="size-5 text-accent" />]
+  }
 ]
 
 export default function AboutPage() {
-  const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
-  const wa = buildWhatsAppUrl(whatsapp, 'Hello DRP Exotic Farms, I would like to know more about your journey.')
-
   return (
     <>
       <PageMeta
         title="About Us | DRP Exotic Farms"
-        description="Learn about the visionaries and the journey behind DRP Exotic Farms, pioneering sustainable exotic fruit farming."
+        description="Learn about the visionaries and the journey behind DRP Exotic Farms, pioneering sustainable exotic fruit farming for modern growers."
         path="/about"
       />
 
       {/* 1. HERO INTRODUCTION */}
       <section className="bg-primary pt-32 pb-20 text-neutral relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src={LOCAL_ASSETS.orchardNight} alt="" className="w-full h-full object-cover opacity-10" />
+          <img src={CLIENT_ASSETS.orchardOverview} alt="" className="w-full h-full object-cover opacity-15" />
         </div>
         <div className="section-shell relative z-10">
           <motion.div {...fadeIn} className="max-w-3xl">
-            <span className="section-label border-neutral/20 bg-neutral/10 text-neutral">Our Story</span>
+            <span className="section-label border-neutral/20 bg-neutral/10 text-neutral">About DRP</span>
             <h1 className="text-4xl sm:text-6xl font-display leading-tight mt-6 mb-6">
-              Pioneering <span className="text-accent">Exotic Farming</span>
+              Helping You <span className="text-accent">Build & Grow</span>
             </h1>
             <p className="text-lg text-neutral/80 leading-relaxed">
-              DRP Exotic Farms transforms traditional land into high-yield sustainable exotic fruit orchards through scientific guidance.
+              As growers ourselves, we understand the journey. We are here to help you set up your farm, grow high-yield exotic fruits, and successfully sell them to the market.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* 2. FOUNDER & CO-FOUNDER - Optimized Flip Cards */}
-      <section className="bg-secondary/30">
-        <div className="section-shell">
-          <div className="text-center mb-12">
-            <span className="section-label">Leadership</span>
-            <h2 className="section-title">The Visionaries</h2>
-          </div>
-          <div className="grid grid-cols-2 gap-4 sm:gap-8 max-w-4xl mx-auto">
-            {/* Founder */}
-            <FlipCard className="h-[280px] sm:h-[400px]">
-              <div className="bg-white shadow-sm border border-primary/5 p-3 sm:p-6 flex flex-col items-center justify-center h-full">
-                <div className="size-24 sm:size-44 rounded-full overflow-hidden mb-4 sm:mb-6 border-4 border-accent/20">
-                  <img src={LOCAL_ASSETS.orchardTeam} alt="Founder" className="w-full h-full object-cover" style={{ objectPosition: '36% center' }} />
-                </div>
-                <h3 className="text-base sm:text-2xl font-display text-primary text-center leading-tight">Dharmesh Patel</h3>
-                <p className="text-accent font-bold uppercase tracking-widest text-[0.7rem] mt-2">Founder</p>
-              </div>
-              <div className="bg-primary p-4 sm:p-10 flex flex-col items-center justify-center text-center h-full">
-                <h3 className="text-lg sm:text-2xl font-display text-accent mb-3 sm:mb-4">Dharmesh Patel</h3>
-                <p className="text-neutral/80 text-[0.68rem] sm:text-sm leading-relaxed">
-                  With deep roots in agriculture and a vision for innovation, Dharmesh leads the strategic direction and orchard development at DRP Exotic Farms.
-                </p>
-                <div className="mt-4 sm:mt-8 flex gap-4">
-                  <Zap className="size-5 sm:size-6 text-accent" />
-                  <Award className="size-5 sm:size-6 text-accent" />
-                </div>
-              </div>
-            </FlipCard>
-
-            {/* Co-Founder */}
-            <FlipCard className="h-[280px] sm:h-[400px]">
-              <div className="bg-white shadow-sm border border-primary/5 p-3 sm:p-6 flex flex-col items-center justify-center h-full">
-                <div className="size-24 sm:size-44 rounded-full overflow-hidden mb-4 sm:mb-6 border-4 border-accent/20">
-                  <img src={LOCAL_ASSETS.orchardTeam} alt="Co-Founder" className="w-full h-full object-cover" style={{ objectPosition: '64% center' }} />
-                </div>
-                <h3 className="text-base sm:text-2xl font-display text-primary text-center leading-tight">Team DRP</h3>
-                <p className="text-accent font-bold uppercase tracking-widest text-[0.7rem] mt-2">Core Leadership</p>
-              </div>
-              <div className="bg-primary p-4 sm:p-10 flex flex-col items-center justify-center text-center h-full">
-                <h3 className="text-lg sm:text-2xl font-display text-accent mb-3 sm:mb-4">The DRP Team</h3>
-                <p className="text-neutral/80 text-[0.68rem] sm:text-sm leading-relaxed">
-                  Our core team brings together expertise in farm operations, supply chain, and market linkage to ensure every orchard succeeds.
-                </p>
-                <div className="mt-4 sm:mt-8 flex gap-4">
-                  <Briefcase className="size-5 sm:size-6 text-accent" />
-                  <Users className="size-5 sm:size-6 text-accent" />
-                </div>
-              </div>
-            </FlipCard>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. OUR TEAM */}
-      <section className="bg-neutral">
-        <div className="section-shell">
-          <div className="text-center mb-16">
-            <span className="section-label">Our Team</span>
-            <h2 className="section-title">Dedicated Experts</h2>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8">
-            {team.map((member, idx) => (
-              <motion.div key={member.name} {...fadeIn} transition={{ delay: idx * 0.1 }} className="text-center group">
-                <div className="aspect-square rounded-2xl overflow-hidden shadow-sm active:scale-[0.98] transition-all duration-300">
-                  <img src={member.image} alt={member.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105" />
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. OPERATIONS */}
+      {/* 2. OUR VISION (Adapted from Operations) */}
       <section className="bg-secondary/20">
         <div className="section-shell">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div {...fadeIn}>
-              <span className="section-label">Operations</span>
-              <h2 className="section-title">Scientific Precision</h2>
+              <span className="section-label">Our Vision</span>
+              <h2 className="section-title">Cultivating Success through Science</h2>
               <p className="section-description">
-                Our farm operations use data-driven insights to manage irrigation, nutrition, and pest control, ensuring maximum efficiency.
+                Our vision is to bridge the gap between traditional farming and modern commercial success. We believe in data-driven insights to manage irrigation, nutrition, and pest control, ensuring maximum efficiency for every grower.
               </p>
               <div className="mt-6 grid grid-cols-2 gap-4">
                 {['Drip Irrigation', 'Organic Protocols', 'Soil Monitoring', 'Quality Control'].map((item) => (
@@ -149,8 +96,75 @@ export default function AboutPage() {
               </div>
             </motion.div>
             <motion.div {...fadeIn} transition={{ delay: 0.2 }} className="flex justify-center">
-              <img src={LOCAL_ASSETS.dragonFruitRows} alt="Operations" className="rounded-2xl shadow-lg max-w-full lg:max-w-md aspect-video object-cover" />
+              <div className="rounded-2xl shadow-lg overflow-hidden group">
+                <img 
+                  src={CLIENT_ASSETS.aboutPage} 
+                  alt="Scientific Farming" 
+                  className="max-w-full lg:max-w-md aspect-square object-cover transition-transform duration-500 group-hover:scale-110" 
+                />
+              </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. OUR STORY (Visual Storytelling) */}
+      <section className="bg-neutral">
+        <div className="section-shell">
+          <div className="text-center mb-12 sm:mb-16">
+            <span className="section-label">Our Journey</span>
+            <h2 className="section-title">The DRP Story</h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-8">
+            {[
+              { icon: History, title: 'How We Started', text: 'Born from a passion to introduce premium exotic varieties to local landscapes.' },
+              { icon: Target, title: 'Why Exotic Farming', text: 'Identifying high-demand, high-margin crops that offer sustainable long-term returns.' },
+              { icon: TrendingUp, title: 'Our Growth', text: 'From a single plot to managing sprawling commercial orchards across multiple states.' },
+              { icon: Heart, title: 'Our Values', text: 'Committed to transparency, scientific integrity, and the success of our grower community.' },
+            ].map((item, idx) => (
+              <motion.div key={item.title} {...fadeIn} transition={{ delay: idx * 0.1 }} className="flex flex-col items-center text-center p-4 sm:p-6 bg-secondary/10 rounded-2xl border border-primary/5">
+                <div className="size-10 sm:size-12 bg-primary rounded-full flex items-center justify-center text-accent mb-3 sm:mb-4">
+                  <item.icon className="size-5 sm:size-6" />
+                </div>
+                <h3 className="text-xs sm:text-lg font-display text-primary mb-1.5 sm:mb-2 leading-tight">{item.title}</h3>
+                <p className="text-[0.6rem] sm:text-xs text-primary/70 leading-relaxed">{item.text}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. OUR VISIONARIES */}
+      <section className="bg-secondary/30">
+        <div className="section-shell">
+          <div className="text-center mb-12">
+            <span className="section-label">Leadership</span>
+            <h2 className="section-title">Our Visionaries</h2>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+            {visionaries.map((v) => (
+              <FlipCard key={v.name} className="h-[450px]">
+                {/* Front Side */}
+                <div className="relative h-full w-full rounded-2xl overflow-hidden">
+                  <img src={v.image} alt={v.name} className="w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex flex-col justify-end p-6 text-left">
+                    <h3 className="text-2xl font-display text-neutral leading-tight">{v.name}</h3>
+                    <p className="text-accent font-bold uppercase tracking-widest text-[0.7rem] mt-1 mb-2">{v.role}</p>
+                    <p className="text-neutral/80 text-xs leading-relaxed">{v.intro}</p>
+                  </div>
+                </div>
+                {/* Back Side */}
+                <div className="bg-primary p-8 flex flex-col items-center justify-center text-center h-full rounded-2xl">
+                  <h3 className="text-2xl font-display text-accent mb-4">{v.name}</h3>
+                  <p className="text-neutral/80 text-sm leading-relaxed mb-6">
+                    {v.description}
+                  </p>
+                  <div className="flex gap-4">
+                    {v.icons}
+                  </div>
+                </div>
+              </FlipCard>
+            ))}
           </div>
         </div>
       </section>
@@ -158,17 +172,17 @@ export default function AboutPage() {
       {/* 5. MILESTONES */}
       <section className="bg-neutral">
         <div className="section-shell">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-10">
-              <span className="section-label">Milestones</span>
-              <h2 className="section-title">The DRP Journey</h2>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="section-label">Timeline</span>
+              <h2 className="section-title">Milestones of Excellence</h2>
             </div>
-            <div className="grid sm:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {milestones.map((m, idx) => (
-                <motion.div key={m.year} {...fadeIn} transition={{ delay: idx * 0.1 }} className="premium-card !bg-secondary/30 border-none text-center">
-                  <div className="text-3xl font-display text-accent font-bold mb-2">{m.year}</div>
-                  <h3 className="font-bold text-primary mb-1">{m.title}</h3>
-                  <p className="text-[0.65rem] text-primary/60">{m.desc}</p>
+                <motion.div key={m.year} {...fadeIn} transition={{ delay: idx * 0.1 }} className="premium-card !bg-secondary/30 border-none p-8 flex flex-col items-center text-center">
+                  <div className="text-4xl font-display text-accent font-bold mb-3">{m.year}</div>
+                  <h3 className="font-bold text-primary mb-2 text-lg">{m.title}</h3>
+                  <p className="text-xs text-primary/60 leading-relaxed">{m.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -183,7 +197,7 @@ export default function AboutPage() {
             <h2 className="text-3xl sm:text-4xl font-display mb-6">Join the Exotic Revolution</h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="btn-primary">
-                <a href={wa} target="_blank" rel="noreferrer">Get in Touch</a>
+                <Link to="/services">Our Services</Link>
               </Button>
               <Button asChild variant="secondary" size="lg" className="btn-secondary">
                 <Link to="/contact">Visit Our Farms</Link>

@@ -52,6 +52,7 @@ export const ServicesPage = lazyRoute(() => import('@/pages/ServicesPage'))
 export const ProducePage = lazyRoute(() => import('@/pages/ProducePage'))
 export const GalleryPage = lazyRoute(() => import('@/pages/GalleryPage'))
 export const ContactPage = lazyRoute(() => import('@/pages/ContactPage'))
+export const FaqPage = lazyRoute(() => import('@/pages/FaqPage'))
 export const PrivacyPage = lazyRoute(() => import('@/pages/PrivacyPage'))
 export const TermsPage = lazyRoute(() => import('@/pages/TermsPage'))
 export const BlogPage = lazyRoute(() => import('@/pages/BlogPage'))
@@ -71,6 +72,7 @@ export const routePreloaders: Record<string, () => Promise<unknown>> = {
   '/produce': ProducePage.preload,
   '/gallery': GalleryPage.preload,
   '/contact': ContactPage.preload,
+  '/faq': FaqPage.preload,
   '/journal': BlogPage.preload,
   '/privacy': PrivacyPage.preload,
   '/terms': TermsPage.preload,
@@ -101,6 +103,7 @@ export function warmPublicRoutes() {
       ProducePage.preload(),
       GalleryPage.preload(),
       ContactPage.preload(),
+      FaqPage.preload(),
       BlogPage.preload(),
     ])
       .then(() => undefined)

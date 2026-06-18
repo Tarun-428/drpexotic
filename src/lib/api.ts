@@ -82,8 +82,10 @@ export const api = {
   deleteGalleryItem(token: string, itemId: string) {
     return request<void>(`/admin/gallery/${itemId}`, { method: 'DELETE', token })
   },
-  listPublicGallery(page = 1, pageSize = 24) {
-    return request<PaginationResponse<GalleryItem>>(`/public/gallery?page=${page}&page_size=${pageSize}`)
+  listPublicGallery(page = 1, pageSize = 24, tag?: string) {
+    const query = new URLSearchParams({ page: String(page), page_size: String(pageSize) })
+    if (tag) query.set('tag', tag)
+    return request<PaginationResponse<GalleryItem>>(`/public/gallery?${query.toString()}`)
   },
   listAdminBlogs(token: string, params?: { status?: string; search?: string }) {
     const query = new URLSearchParams({ page: '1', page_size: '50' })
@@ -176,5 +178,11 @@ export const api = {
   },
   createTag(token: string, payload: { name: string; slug: string }) {
     return request<TaxonomyOption>('/admin/taxonomy/tags', { token, json: payload })
+  },
+  updateTag(token: string, tagId: string, payload: { name: string; slug: string }) {
+    return request<TaxonomyOption>(`/admin/taxonomy/tags/${tagId}`, { method: 'PUT', token, json: payload })
+  },
+  deleteTag(token: string, tagId: string) {
+    return request<void>(`/admin/taxonomy/tags/${tagId}`, { method: 'DELETE', token })
   },
 }

@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { useSiteConfigStore } from '@/store/siteConfigStore'
 
 const schema = z.object({
   name: z.string().min(2, 'Please enter your name.'),
@@ -28,22 +27,12 @@ const topicOptions: Array<{ value: FormValues['topic']; label: string }> = [
   { value: 'other', label: 'Other' },
 ]
 
-function buildMailto(values: FormValues, toEmail: string) {
-  const subject = encodeURIComponent(`Website enquiry · ${values.topic}`)
-  const body = encodeURIComponent(
-    `Name: ${values.name}\nEmail: ${values.email}\nPhone: ${values.phone}\nTopic: ${values.topic}\n\n${values.message}`,
-  )
-  return `mailto:${toEmail}?subject=${subject}&body=${body}`
-}
-
 function FieldError({ message }: { message?: string }) {
   if (!message) return null
   return <p className="text-xs text-red-700">{message}</p>
 }
 
 export function ContactForm() {
-  const toEmail = useSiteConfigStore((s) => s.config.contact.email)
-  const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT as string | undefined
   const triggerRef = useRef<HTMLButtonElement>(null)
   const [menuWidth, setMenuWidth] = useState<number | null>(null)
 
@@ -76,23 +65,28 @@ export function ContactForm() {
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
-      if (endpoint) {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(values),
-        })
-        if (!res.ok) throw new Error('bad status')
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          ...values,
+          access_key: 'd667d290-d447-4409-855e-ade5344d101f',
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
         toast.success('Thanks — your message is on its way.')
         form.reset({ name: '', email: '', phone: '', topic: 'produce', message: '' })
-        return
+      } else {
+        throw new Error(result.message || 'Submission failed')
       }
-
-      toast.success('Opening your email app with a pre-filled message…')
-      window.setTimeout(() => {
-        window.location.href = buildMailto(values, toEmail)
-      }, 250)
-    } catch {
+    } catch (error) {
+      console.error('Contact form error:', error)
       toast.error('Could not send right now. Please try WhatsApp or email directly.')
     }
   })
@@ -199,9 +193,7 @@ export function ContactForm() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-md text-xs leading-relaxed text-forest-900/58">
-          {endpoint
-            ? 'Messages are being posted to your configured endpoint.'
-            : 'No endpoint is configured yet, so we will open your email app with a pre-filled draft.'}
+          Enquiries are sent securely via Web3Forms to our team.
         </p>
         <Button type="submit" disabled={form.formState.isSubmitting} size="lg">
           {form.formState.isSubmitting ? 'Sending…' : 'Send your enquiry'}

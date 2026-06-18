@@ -27,10 +27,10 @@ export function HomeNewsTicker() {
 
   return (
     <div className="bg-secondary/40 border-y border-primary/5 overflow-hidden py-3">
-      <div className="max-w-7xl mx-auto px-4 flex items-center gap-6">
-        <div className="flex items-center gap-2 shrink-0 border-r border-primary/10 pr-6">
+      <div className="max-w-7xl mx-auto px-4 flex items-center gap-3 sm:gap-6">
+        <div className="flex items-center gap-2 shrink-0 sm:border-r border-primary/10 sm:pr-6">
           <Newspaper className="size-4 text-accent" />
-          <span className="text-[0.65rem] font-bold uppercase tracking-widest text-primary">Latest Insights</span>
+          <span className="text-[0.65rem] font-bold uppercase tracking-widest text-primary hidden sm:inline">Latest Insights</span>
         </div>
         
         <div className="flex-1 overflow-hidden relative">
@@ -51,7 +51,7 @@ export function HomeNewsTicker() {
           <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-secondary/40 to-transparent z-10" />
         </div>
 
-        <Link to="/journal" className="shrink-0 flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-primary/50 hover:text-primary transition-colors">
+        <Link to="/journal" className="shrink-0 hidden sm:flex items-center gap-2 text-[0.65rem] font-bold uppercase tracking-widest text-primary/50 hover:text-primary transition-colors">
           View All <ArrowRight className="size-3" />
         </Link>
       </div>

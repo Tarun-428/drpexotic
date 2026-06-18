@@ -17,6 +17,7 @@ class GalleryItemBase(BaseModel):
   public_id: str = Field(min_length=1)
   sort_order: int = 0
   is_published: bool = True
+  tags: list[str] = Field(default_factory=list)
 
 
 class GalleryItemCreate(GalleryItemBase):
@@ -32,6 +33,7 @@ class GalleryItemUpdate(BaseModel):
   public_id: str | None = None
   sort_order: int | None = None
   is_published: bool | None = None
+  tags: list[str] | None = None
 
 
 class GalleryItem(MongoModel, GalleryItemBase):

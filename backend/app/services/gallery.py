@@ -12,8 +12,10 @@ def _to_gallery_item(document: dict | None) -> GalleryItem | None:
   return GalleryItem.model_validate(document)
 
 
-async def list_gallery_items(database: AsyncIOMotorDatabase, *, page: int, page_size: int, published_only: bool):
+async def list_gallery_items(database: AsyncIOMotorDatabase, *, page: int, page_size: int, published_only: bool, tag: str | None = None):
   query = {"is_published": True} if published_only else {}
+  if tag:
+    query["tags"] = tag
   skip = (page - 1) * page_size
   cursor = database.gallery_items.find(query).sort([("sort_order", 1), ("created_at", -1)]).skip(skip).limit(page_size)
   items = [_to_gallery_item(item) async for item in cursor]

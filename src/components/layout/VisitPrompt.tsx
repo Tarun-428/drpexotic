@@ -13,8 +13,15 @@ export function VisitPrompt() {
   const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
   const wa = buildWhatsAppUrl(
     whatsapp,
-    'Hello DRP Exotic Farms, I would like to plan a farm visit or discuss a consultation.',
+    'Hello DRP Exotic Farms, I would like to plan a farm visit or discuss orchard development.',
   )
+
+  const dismiss = () => {
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.setItem(promptStorageKey, 'true')
+    }
+    setIsVisible(false)
+  }
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -23,13 +30,6 @@ export function VisitPrompt() {
     const timeoutId = window.setTimeout(() => setIsVisible(true), 1800)
     return () => window.clearTimeout(timeoutId)
   }, [])
-
-  const dismiss = () => {
-    if (typeof window !== 'undefined') {
-      window.sessionStorage.setItem(promptStorageKey, 'true')
-    }
-    setIsVisible(false)
-  }
 
   return (
     <AnimatePresence>
@@ -41,7 +41,7 @@ export function VisitPrompt() {
           animate={{ opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }}
           exit={{ opacity: 0, x: 28, y: 12, scale: 0.94 }}
           transition={{ type: 'spring', stiffness: 260, damping: 20, mass: 0.8 }}
-          className="fixed bottom-20 right-3 z-40 w-[min(18.5rem,calc(100vw-1.5rem))] overflow-hidden rounded-2xl border border-accent/45 bg-neutral/88 p-3 text-primary shadow-[0_24px_70px_-38px_rgba(23,72,54,0.72)] backdrop-blur-xl sm:bottom-28 sm:right-6 sm:w-[21rem] sm:p-4"
+          className="fixed bottom-20 right-3 z-[60] w-[min(18.5rem,calc(100vw-1.5rem))] overflow-hidden rounded-2xl border border-accent/45 bg-neutral/88 p-3 text-primary shadow-[0_24px_70px_-38px_rgba(23,72,54,0.72)] backdrop-blur-xl sm:bottom-28 sm:right-6 sm:w-[21rem] sm:p-4"
         >
           <motion.div
             aria-hidden
@@ -59,10 +59,14 @@ export function VisitPrompt() {
           <button
             type="button"
             aria-label="Close visit prompt"
-            onClick={dismiss}
-            className="absolute right-2.5 top-2.5 rounded-full p-1.5 text-primary/45 transition hover:bg-secondary hover:text-primary active:scale-[0.96] sm:right-3 sm:top-3"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              dismiss();
+            }}
+            className="absolute right-1 top-1 z-[70] rounded-full p-3 text-primary/45 transition hover:bg-secondary hover:text-primary active:scale-[0.96] sm:right-1.5 sm:top-1.5"
           >
-            <X className="size-4" />
+            <X className="size-5" />
           </button>
 
           <div className="relative flex gap-2.5 pr-7 sm:gap-3 sm:pr-8">
@@ -80,7 +84,7 @@ export function VisitPrompt() {
           </div>
 
           <p className="relative mt-2 text-xs leading-relaxed text-primary/70 sm:mt-3 sm:text-sm">
-            Book a quick visit or talk to our team about consultancy, produce, and orchard planning.
+            Book a quick visit or talk to our team about orchard planning, premium produce, and farming partnerships.
           </p>
 
           <div className="relative mt-3 flex gap-2 sm:mt-4">

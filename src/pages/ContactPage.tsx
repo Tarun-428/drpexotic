@@ -4,7 +4,7 @@ import { PageMeta } from '@/components/seo/PageMeta'
 import { MapEmbed } from '@/components/maps/MapEmbed'
 import { ContactForm } from '@/components/forms/ContactForm'
 import { Button } from '@/components/ui/button'
-import { LOCAL_ASSETS } from '@/constants/assets'
+import { CLIENT_ASSETS } from '@/constants/assets'
 import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 
@@ -23,14 +23,14 @@ export default function ContactPage() {
     <>
       <PageMeta
         title="Contact Us | DRP Exotic Farms"
-        description="Reach out to DRP Exotic Farms for orchard consultancy, premium produce sourcing, or partnership inquiries."
+        description="Reach out to DRP Exotic Farms for orchard development support, premium produce sourcing, or partnership inquiries."
         path="/contact"
       />
 
       {/* HERO SECTION - Unified treatment */}
       <section className="bg-primary pt-32 pb-20 text-neutral relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src={LOCAL_ASSETS.orchardTeam} alt="" className="w-full h-full object-cover opacity-10" />
+          <img src={CLIENT_ASSETS.consultation} alt="" className="w-full h-full object-cover opacity-10" />
         </div>
         <div className="section-shell relative z-10">
           <motion.div {...fadeIn} className="max-w-3xl">

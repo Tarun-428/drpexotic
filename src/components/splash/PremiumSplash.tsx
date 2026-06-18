@@ -200,7 +200,7 @@ export function PremiumSplash({ onHandoffStart, setIntroComplete }: PremiumSplas
             DRP Exotic Farms
           </h1>
           <p className="mt-4 text-xs md:text-sm text-[#D4C3A3] tracking-[0.5em] uppercase font-light opacity-80">
-            Agricultural Consultancy
+            Cultivating Nourishment
           </p>
         </div>
       </div>

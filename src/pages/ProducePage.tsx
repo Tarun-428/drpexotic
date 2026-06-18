@@ -4,8 +4,6 @@ import { PageMeta } from '@/components/seo/PageMeta'
 import { LOCAL_ASSETS } from '@/constants/assets'
 import { FRUIT_VARIETIES } from '@/constants/fruits'
 import { Button } from '@/components/ui/button'
-import { useSiteConfigStore } from '@/store/siteConfigStore'
-import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { Link } from 'react-router-dom'
 import { FlipCard } from '@/components/ui/FlipCard'
 
@@ -23,9 +21,6 @@ const qualityStandards = [
 ]
 
 export default function ProducePage() {
-  const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
-  const wa = buildWhatsAppUrl(whatsapp, 'Hello DRP Exotic Farms, I am interested in sourcing your premium produce.')
-
   return (
     <>
       <PageMeta
@@ -146,10 +141,10 @@ export default function ProducePage() {
             <h2 className="text-2xl sm:text-4xl font-display mb-6">Source Premium Exotic Fruits</h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="btn-primary">
-                <a href={wa} target="_blank" rel="noreferrer">Inquire Sourcing</a>
+                <Link to="/gallery">Explore Gallery</Link>
               </Button>
               <Button asChild variant="secondary" size="lg" className="btn-secondary">
-                <Link to="/contact">Get Pricing</Link>
+                <Link to="/contact">Inquire Sourcing</Link>
               </Button>
             </div>
           </motion.div>

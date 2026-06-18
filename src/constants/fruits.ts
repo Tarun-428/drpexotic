@@ -1,4 +1,4 @@
-import { LOCAL_ASSETS } from '@/constants/assets'
+import { LOCAL_ASSETS, CLIENT_ASSETS } from '@/constants/assets'
 
 export type FruitVariety = {
   slug: string
@@ -17,7 +17,7 @@ export const FRUIT_VARIETIES: FruitVariety[] = [
     description:
       'High-value berries with tight quality gates—suited to controlled nutrition programs and residue-aware protocols.',
     notes: ['Premium retail & ingredient channels', 'Cold-chain sensitive—planned logistics'],
-    image: LOCAL_ASSETS.dragonFruitHalves,
+    image: CLIENT_ASSETS.blueberry,
   },
   {
     slug: 'avocado',
@@ -44,7 +44,7 @@ export const FRUIT_VARIETIES: FruitVariety[] = [
     description:
       'Heritage flavour with modern nutrition diagnostics—bridging market demand and sustainable intensity.',
     notes: ['Canopy management for airflow', 'Grade-out planning for packhouses'],
-    image: LOCAL_ASSETS.orchardTeam,
+    image: CLIENT_ASSETS.mangoHarvest,
   },
   {
     slug: 'red-diamond-guava',
@@ -62,6 +62,6 @@ export const FRUIT_VARIETIES: FruitVariety[] = [
     description:
       'High-turnover blocks managed for Panama/TR4 awareness contexts and efficient desuckering labour models.',
     notes: ['Drainage & bunding patterns', 'Desuckering SOPs'],
-    image: LOCAL_ASSETS.orchardNight,
+    image: CLIENT_ASSETS.banana,
   },
 ]

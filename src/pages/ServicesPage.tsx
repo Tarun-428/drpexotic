@@ -7,10 +7,8 @@ import {
 } from 'lucide-react'
 import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
-import { useSiteConfigStore } from '@/store/siteConfigStore'
-import { buildWhatsAppUrl } from '@/utils/whatsapp'
 import { Link } from 'react-router-dom'
-import { LOCAL_ASSETS } from '@/constants/assets'
+import { CLIENT_ASSETS } from '@/constants/assets'
 import { FlipCard } from '@/components/ui/FlipCard'
 
 const fadeIn = {
@@ -21,39 +19,36 @@ const fadeIn = {
 } as const
 
 const services = [
-  { step: '01', title: 'Consultation', image: LOCAL_ASSETS.orchardTeam, desc: 'Defining your vision, budget, and commercial goals for the orchard project.' },
-  { step: '02', title: 'Land Assessment', image: LOCAL_ASSETS.dragonFruitRows, desc: 'Detailed scientific analysis of soil, water, and climatic suitability for exotic crops.' },
-  { step: '03', title: 'Crop Selection', image: LOCAL_ASSETS.avocado, desc: 'Identifying high-yield, premium exotic varieties tailored to your specific land conditions.' },
-  { step: '04', title: 'Orchard Development', image: LOCAL_ASSETS.dragonFruitHalves, desc: 'Precision layout planning, system establishment, and premium planting material supply.' },
-  { step: '05', title: 'Farm Management', image: LOCAL_ASSETS.guava, desc: 'Step-by-step guidance on nutrition, irrigation, and scientific crop management protocols.' },
-  { step: '06', title: 'Market Linkage', image: LOCAL_ASSETS.dragonFruitCut, desc: 'Connecting your harvest to high-value retail networks and premium buyer channels.' },
+  { step: '01', title: 'Orchard Planning', image: CLIENT_ASSETS.protectedCultivation, desc: 'Defining your vision, layout, and commercial goals for a successful orchard project.' },
+  { step: '02', title: 'Planting Material', image: CLIENT_ASSETS.plantingMaterial, desc: 'Supplying premium, high-yield exotic fruit saplings and genetically superior varieties.' },
+  { step: '03', title: 'Farm Development', image: CLIENT_ASSETS.orchardSunrise, desc: 'End-to-end setup including precision irrigation, fencing, and scientific land preparation.' },
+  { step: '04', title: 'Orchard Management', image: CLIENT_ASSETS.avocadoTree, desc: 'Ongoing step-by-step guidance on nutrition, pest control, and scientific farming protocols.' },
+  { step: '05', title: 'Harvest Support', image: CLIENT_ASSETS.mangoHarvest, desc: 'Optimizing harvest techniques and post-harvest handling to maintain premium fruit quality.' },
+  { step: '06', title: 'Market Linkage', image: CLIENT_ASSETS.marketDisplay, desc: 'Connecting your successful harvest to premium retail networks and high-value buyer channels.' },
 ]
 
 export default function ServicesPage() {
-  const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
-  const wa = buildWhatsAppUrl(whatsapp, 'Hello DRP Exotic Farms, I am interested in your orchard consultancy services.')
-
   return (
     <>
       <PageMeta
-        title="Our Services | Complete Orchard Consultancy"
-        description="From land assessment to market linkage, DRP Exotic Farms provides end-to-end consultancy for building profitable exotic fruit orchards."
+        title="Our Services | Complete Grower Guidance"
+        description="From orchard planning to market linkage, DRP Exotic Farms provides end-to-end support for building profitable exotic fruit orchards."
         path="/services"
       />
 
       {/* HERO */}
       <section className="bg-primary pt-32 pb-20 text-neutral text-center relative overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src={LOCAL_ASSETS.dragonFruitWhole} alt="" className="w-full h-full object-cover opacity-10" />
+          <img src={CLIENT_ASSETS.protectedCultivation} alt="" className="w-full h-full object-cover opacity-10" />
         </div>
         <div className="section-shell relative z-10">
           <motion.div {...fadeIn} className="max-w-3xl mx-auto">
-            <span className="section-label border-neutral/20 bg-neutral/10 text-neutral">Our Expertise</span>
+            <span className="section-label border-neutral/20 bg-neutral/10 text-neutral">Grower Support</span>
             <h1 className="text-4xl sm:text-6xl font-display leading-tight mt-6 mb-6">
-              Complete <span className="text-accent">Orchard Journey</span>
+              WE HELP <span className="text-accent">YOU WITH</span>
             </h1>
             <p className="text-lg text-neutral/80 leading-relaxed">
-              We provide 360-degree consultancy to establish and manage highly profitable commercial exotic fruit orchards.
+              We provide 360-degree Grower Guidance to establish and manage highly profitable commercial exotic fruit orchards.
             </p>
           </motion.div>
         </div>
@@ -65,8 +60,12 @@ export default function ServicesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {services.map((s) => (
               <FlipCard key={s.title} className="h-[320px]">
-                <div className="relative h-full w-full">
-                  <img src={s.image} alt={s.title} className="w-full h-full object-cover" />
+                <div className="relative h-full w-full overflow-hidden group">
+                  <img 
+                    src={s.image} 
+                    alt={s.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent flex flex-col justify-end p-6 text-left">
                     <span className="text-accent font-bold text-[0.65rem] uppercase tracking-[0.2em] mb-2">{s.step}</span>
                     <h3 className="text-xl sm:text-2xl font-display text-neutral">{s.title}</h3>
@@ -92,7 +91,7 @@ export default function ServicesPage() {
             <motion.div {...fadeIn}>
               <h2 className="section-title">Why Partner with Us?</h2>
               <p className="section-description">
-                We bridge the gap between agricultural ambition and commercial success through scientific discipline and market expertise.
+                We bridge the gap between agricultural ambition and commercial success through scientific discipline and practical grower support.
               </p>
               <div className="mt-8 space-y-6">
                 {[
@@ -122,9 +121,6 @@ export default function ServicesPage() {
                   </li>
                 ))}
               </ul>
-              <Button asChild size="lg" className="btn-secondary w-full mt-8">
-                <a href={wa} target="_blank" rel="noreferrer">Get Expert Advice</a>
-              </Button>
             </motion.div>
           </div>
         </div>
@@ -137,10 +133,10 @@ export default function ServicesPage() {
             <h2 className="text-2xl sm:text-4xl font-display mb-6">Start Your Success Story</h2>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="btn-primary">
-                <a href={wa} target="_blank" rel="noreferrer">Book Consultation</a>
+                <Link to="/produce">Our Produce</Link>
               </Button>
               <Button asChild variant="secondary" size="lg" className="btn-secondary">
-                <Link to="/contact">Talk to an Expert</Link>
+                <Link to="/contact">Start Your Orchard</Link>
               </Button>
             </div>
           </motion.div>
