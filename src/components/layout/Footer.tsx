@@ -5,8 +5,6 @@ import { FaXTwitter } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 import { useSiteConfigStore } from '@/store/siteConfigStore'
 import type { SiteConfig } from '@/types/siteConfig'
-import { buildWhatsAppUrl } from '@/utils/whatsapp'
-import { Button } from '@/components/ui/button'
 import BrandLogo from '../../../img/logo.svg'
 
 const socialPlatforms: Array<{ key: keyof SiteConfig['socialLinks']; label: string; Icon: IconType }> = [
@@ -25,6 +23,7 @@ const navLinks = [
   { label: 'Gallery', to: '/gallery' },
   { label: 'Journal', to: '/journal' },
   { label: 'Contact', to: '/contact' },
+  { label: 'FAQ', to: '/faq' },
 ]
 
 const legalLinks = [
@@ -35,12 +34,6 @@ const legalLinks = [
 export function Footer() {
   const brandName = useSiteConfigStore((s) => s.config.brandName)
   const socialLinks = useSiteConfigStore((s) => s.config.socialLinks)
-  const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
-
-  const wa = buildWhatsAppUrl(
-    whatsapp,
-    'Hello DRP Exotic Farms, I am interested in your agricultural consultancy services.',
-  )
 
   const visibleSocials = socialPlatforms.flatMap(({ key, label, Icon }) => {
     const url = socialLinks?.[key]?.trim()
@@ -48,26 +41,26 @@ export function Footer() {
   })
 
   return (
-    <footer className="border-t-4 border-accent/55 bg-primary text-neutral shadow-[inset_0_18px_0_rgba(253,250,244,0.06)] py-16 sm:py-24">
-      <div className="section-shell">
-        <div className="grid lg:grid-cols-2 gap-16 mb-16">
-          <div>
-            <Link to="/" className="flex items-center gap-3 mb-8" aria-label="DRP Exotic Farms home">
-              <div className="h-12 w-12 bg-neutral rounded-xl flex items-center justify-center overflow-hidden">
+    <footer className="border-t border-neutral/10 bg-primary text-neutral">
+      <div className="section-shell !py-6 sm:!py-8">
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-6">
+          <div className="max-w-sm">
+            <Link to="/" className="flex items-center gap-2.5 mb-5" aria-label="DRP Exotic Farms home">
+              <div className="h-10 w-10 bg-neutral rounded-lg flex items-center justify-center overflow-hidden">
                 <img src={BrandLogo} alt="DRP Logo" className="h-full w-full object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="font-display text-2xl font-bold leading-none">
+                <span className="font-display text-xl font-bold leading-none">
                   {brandName}
                   <sup>TM</sup>
                 </span>
-                <span className="text-[0.6rem] uppercase tracking-[0.2em] font-bold mt-1 text-neutral/50">
-                  Agricultural Consultancy
+                <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold mt-1 text-neutral/50">
+                  Cultivating Nourishment
                 </span>
               </div>
             </Link>
-            <p className="text-neutral/70 max-w-sm mb-8 leading-relaxed">
-              Pioneering sustainable and profitable exotic fruit farming in India through expert consultancy, scientific management, and market support.
+            <p className="text-neutral/60 text-sm leading-relaxed mb-6">
+              Pioneering sustainable and profitable exotic fruit farming in India through expert grower guidance, scientific management, and market support.
             </p>
             <div className="flex items-center gap-4">
               {visibleSocials.map(({ key, label, Icon, url }) => (
@@ -77,46 +70,47 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="text-neutral/50 hover:text-accent transition-colors"
+                  className="text-neutral/40 hover:text-accent transition-colors"
                 >
-                  <Icon className="size-5" />
+                  <Icon className="size-4" />
                 </a>
               ))}
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-8">
+          <div className="flex flex-wrap gap-x-12 gap-y-8">
             <div>
-              <h4 className="font-bold uppercase tracking-widest text-xs mb-6 text-accent">Quick Links</h4>
-              <nav className="grid gap-4">
+              <h4 className="font-bold uppercase tracking-widest text-[0.65rem] mb-5 text-accent">Explore</h4>
+              <nav className="grid grid-cols-2 gap-x-8 gap-y-3">
                 {navLinks.map(({ label, to }) => (
                   <Link
                     key={to}
                     to={to}
-                    className="text-neutral/70 hover:text-neutral transition-colors"
+                    className="text-neutral/60 hover:text-neutral text-sm transition-colors"
                   >
                     {label}
                   </Link>
                 ))}
               </nav>
             </div>
-            <div>
-              <h4 className="font-bold uppercase tracking-widest text-xs mb-6 text-accent">Get Started</h4>
-              <p className="text-neutral/70 mb-6 text-sm">
-                Ready to build your profitable orchard? Book a consultation today.
+            <div className="max-w-[200px]">
+              <h4 className="font-bold uppercase tracking-widest text-[0.65rem] mb-5 text-accent">Get Started</h4>
+              <p className="text-neutral/60 mb-4 text-xs leading-relaxed">
+                Ready to build your profitable orchard? Start your journey today.
               </p>
-              <Button asChild size="sm" className="w-full sm:w-auto">
-                <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                  Book Consultation
-                  <ArrowUpRight className="size-4" />
-                </a>
-              </Button>
+              <Link 
+                to="/produce" 
+                className="text-accent hover:text-accent/80 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+              >
+                Learn More
+                <ArrowUpRight className="size-3" />
+              </Link>
             </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-neutral/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral/40">
-          <p>© {new Date().getFullYear()} {brandName}™. All rights reserved.</p>
+        <div className="pt-4 border-t border-neutral/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-[0.65rem] text-neutral/30 font-medium">
+          <p>© {new Date().getFullYear()} {brandName.replace('™', '')}™. All rights reserved.</p>
           <nav className="flex items-center gap-6">
             {legalLinks.map(({ label, to }) => (
               <Link key={to} to={to} className="hover:text-neutral transition-colors">

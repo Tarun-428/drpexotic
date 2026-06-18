@@ -48,21 +48,14 @@ export const useSiteConfigStore = create(
         set((s) => ({
           config: {
             ...s.config,
-            heroHome: {
-              ...s.config.heroHome,
-              primaryCta: settings.hero_cta_links.primary_label || s.config.heroHome.primaryCta,
-              primaryCtaUrl: settings.hero_cta_links.primary_url || s.config.heroHome.primaryCtaUrl,
-              secondaryCta: settings.hero_cta_links.secondary_label || s.config.heroHome.secondaryCta,
-              secondaryCtaUrl: settings.hero_cta_links.secondary_url || s.config.heroHome.secondaryCtaUrl,
-            },
-            footerContent: settings.footer_content || s.config.footerContent,
+            // heroHome CTA and footerContent are now static, keeping them from DEFAULT_SITE_CONFIG/current state
             socialLinks: {
               instagram: settings.social_links?.instagram || '',
               facebook: settings.social_links?.facebook || '',
               youtube: settings.social_links?.youtube || '',
               linkedin: settings.social_links?.linkedin || '',
               twitter: settings.social_links?.twitter || '',
-              whatsapp: settings.social_links?.whatsapp || '',
+              whatsapp: settings.whatsapp_number ? `https://wa.me/${settings.whatsapp_number.replace(/\D/g, '')}` : settings.social_links?.whatsapp || '',
             },
             contact: {
               ...s.config.contact,
@@ -75,6 +68,7 @@ export const useSiteConfigStore = create(
             },
           },
         })),
+
       setGallery: (images) =>
         set((s) => ({
           config: { ...s.config, gallery: images },

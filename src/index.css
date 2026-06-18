@@ -63,6 +63,10 @@
 
 @utility animate-ticker {
   animation: ticker 30s linear infinite;
+  
+  @media (max-width: 640px) {
+    animation-duration: 20s;
+  }
 }
 
 @keyframes accordion-down {

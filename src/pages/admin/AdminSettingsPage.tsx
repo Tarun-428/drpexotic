@@ -21,9 +21,9 @@ const blankSettings: WebsiteSettings = {
   footer_content: '',
   social_links: { instagram: '', facebook: '', youtube: '', linkedin: '', twitter: '', whatsapp: '' },
   hero_cta_links: {
-    primary_label: 'Explore our produce',
-    primary_url: '/produce',
-    secondary_label: 'Talk on WhatsApp',
+    primary_label: '',
+    primary_url: '',
+    secondary_label: '',
     secondary_url: '',
   },
 }
@@ -68,18 +68,18 @@ export default function AdminSettingsPage() {
           <AdminPanel className="p-5">
             <div className="mt-4 grid gap-3">
               <div className="text-sm text-zinc-600">Contact information shown on the site (phone, WhatsApp, email).</div>
-              <Input value={settings.whatsapp_number} onChange={(event) => setSettings((s) => ({ ...s, whatsapp_number: event.target.value }))} aria-label="WhatsApp number" className="admin-field" />
-              <Input value={settings.contact_phone_display} onChange={(event) => setSettings((s) => ({ ...s, contact_phone_display: event.target.value }))} aria-label="Display phone" className="admin-field" />
-              <Input value={settings.contact_phone_tel} onChange={(event) => setSettings((s) => ({ ...s, contact_phone_tel: event.target.value }))} aria-label="Phone link" className="admin-field" />
-              <Input value={settings.email} onChange={(event) => setSettings((s) => ({ ...s, email: event.target.value }))} aria-label="Email" className="admin-field" />
+              <Input value={settings.whatsapp_number} onChange={(event) => setSettings((s) => ({ ...s, whatsapp_number: event.target.value }))} aria-label="WhatsApp number" className="admin-field" placeholder="WhatsApp Number (e.g. 919876543210)" />
+              <Input value={settings.contact_phone_display} onChange={(event) => setSettings((s) => ({ ...s, contact_phone_display: event.target.value }))} aria-label="Display phone" className="admin-field" placeholder="Display Phone Number" />
+              <Input value={settings.contact_phone_tel} onChange={(event) => setSettings((s) => ({ ...s, contact_phone_tel: event.target.value }))} aria-label="Phone link" className="admin-field" placeholder="Phone Tel (e.g. +910000000000)" />
+              <Input value={settings.email} onChange={(event) => setSettings((s) => ({ ...s, email: event.target.value }))} aria-label="Email" className="admin-field" placeholder="Email Address" />
             </div>
           </AdminPanel>
 
           <AdminPanel className="p-5">
             <div className="mt-4 grid gap-3">
               <div className="text-sm text-zinc-600">Location and map embed — paste full Google Maps embed URL for correct rendering.</div>
-              <Textarea rows={4} value={settings.farm_location} onChange={(event) => setSettings((s) => ({ ...s, farm_location: event.target.value }))} aria-label="Location" className="admin-field min-h-[7rem]" />
-              <Input value={settings.google_maps_embed_url} onChange={(event) => setSettings((s) => ({ ...s, google_maps_embed_url: event.target.value }))} aria-label="Maps URL" className="admin-field" />
+              <Textarea rows={4} value={settings.farm_location} onChange={(event) => setSettings((s) => ({ ...s, farm_location: event.target.value }))} aria-label="Location" className="admin-field min-h-[7rem]" placeholder="Farm / Office Location Address" />
+              <Input value={settings.google_maps_embed_url} onChange={(event) => setSettings((s) => ({ ...s, google_maps_embed_url: event.target.value }))} aria-label="Maps URL" className="admin-field" placeholder="Google Maps Embed URL" />
             </div>
           </AdminPanel>
 
@@ -87,7 +87,7 @@ export default function AdminSettingsPage() {
             <div className="mt-4 grid gap-3">
               <div className="text-sm text-zinc-600">Social links should be full URLs (https://...). These will be shown in the site footer and header areas.</div>
               <div className="grid gap-3">
-                {(['instagram', 'facebook', 'youtube', 'linkedin', 'twitter', 'whatsapp'] as const).map((key) => {
+                {(['instagram', 'facebook', 'youtube', 'linkedin', 'twitter'] as const).map((key) => {
                   const label = key === 'twitter' ? 'Twitter/X URL' : `${key[0].toUpperCase()}${key.slice(1)} URL`
                   return (
                     <div key={key}>
@@ -102,32 +102,6 @@ export default function AdminSettingsPage() {
                     </div>
                   )
                 })}
-              </div>
-            </div>
-          </AdminPanel>
-
-          <AdminPanel className="p-5">
-            <div className="mt-4 grid gap-3">
-              <div className="text-sm text-zinc-600">Footer content and CTA labels. CTA labels and URLs appear on the homepage hero section.</div>
-              <label className="text-sm text-zinc-700">Footer content</label>
-              <Textarea rows={4} value={settings.footer_content} onChange={(event) => setSettings((s) => ({ ...s, footer_content: event.target.value }))} aria-label="Footer" className="admin-field min-h-[7rem]" />
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div>
-                  <label className="text-sm text-zinc-700">Primary CTA label</label>
-                  <Input value={settings.hero_cta_links.primary_label} onChange={(event) => setSettings((s) => ({ ...s, hero_cta_links: { ...s.hero_cta_links, primary_label: event.target.value } }))} aria-label="Primary label" className="admin-field" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-700">Primary CTA URL</label>
-                  <Input value={settings.hero_cta_links.primary_url} onChange={(event) => setSettings((s) => ({ ...s, hero_cta_links: { ...s.hero_cta_links, primary_url: event.target.value } }))} aria-label="Primary URL" className="admin-field" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-700">Secondary CTA label</label>
-                  <Input value={settings.hero_cta_links.secondary_label} onChange={(event) => setSettings((s) => ({ ...s, hero_cta_links: { ...s.hero_cta_links, secondary_label: event.target.value } }))} aria-label="Secondary label" className="admin-field" />
-                </div>
-                <div>
-                  <label className="text-sm text-zinc-700">Secondary CTA URL</label>
-                  <Input value={settings.hero_cta_links.secondary_url} onChange={(event) => setSettings((s) => ({ ...s, hero_cta_links: { ...s.hero_cta_links, secondary_url: event.target.value } }))} aria-label="Secondary URL" className="admin-field" />
-                </div>
               </div>
             </div>
           </AdminPanel>

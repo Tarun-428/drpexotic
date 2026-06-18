@@ -22,6 +22,7 @@ const links = [
   { to: '/gallery', label: 'Gallery' },
   { to: '/journal', label: 'Journal' },
   { to: '/contact', label: 'Contact' },
+  { to: '/faq', label: 'FAQ' },
 ] as const
 
 function NavItem({
@@ -63,7 +64,7 @@ export function Navbar() {
   const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
   const wa = buildWhatsAppUrl(
     whatsapp,
-    'Hello DRP Exotic Farms, I am looking for agricultural consultancy services.',
+    'Hello DRP Exotic Farms, I am looking for your orchard development services.',
   )
 
   useEffect(() => {
@@ -91,7 +92,7 @@ export function Navbar() {
               DRP Exotic Farms
             </span>
             <span className={cn('text-[0.6rem] uppercase tracking-[0.2em] font-bold mt-1 transition-colors', scrolled ? 'text-primary/50' : 'text-neutral/50')}>
-              Agricultural Consultancy
+              Cultivating Nourishment
             </span>
           </div>
         </Link>
@@ -107,7 +108,7 @@ export function Navbar() {
             <a href={wa} target="_blank" rel="noreferrer">WhatsApp</a>
           </Button>
           <Button asChild size="sm">
-            <Link to="/contact">Book Consultation</Link>
+            <Link to="/produce">Start Your Orchard</Link>
           </Button>
         </div>
 
@@ -115,7 +116,7 @@ export function Navbar() {
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-xl">
-                <Menu className={cn('size-5', scrolled ? 'text-primary' : 'text-neutral')} />
+                <Menu className="size-5 text-primary" />
               </Button>
             </DialogTrigger>
             <DialogSheet className="bg-neutral p-8 border-l border-primary/5">
@@ -134,7 +135,7 @@ export function Navbar() {
               </nav>
               <div className="grid gap-4">
                 <Button asChild className="w-full">
-                  <Link to="/contact" onClick={() => setOpen(false)}>Book Consultation</Link>
+                  <Link to="/produce" onClick={() => setOpen(false)}>Start Your Orchard</Link>
                 </Button>
                 <Button asChild variant="secondary" className="w-full">
                   <a href={wa} target="_blank" rel="noreferrer">WhatsApp</a>

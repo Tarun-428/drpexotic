@@ -20,10 +20,9 @@ import {
 import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
 import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
-import { LOCAL_ASSETS } from '@/constants/assets'
-import { useSiteConfigStore } from '@/store/siteConfigStore'
-import { buildWhatsAppUrl } from '@/utils/whatsapp'
+import { CLIENT_ASSETS } from '@/constants/assets'
 import { HomeNewsTicker } from '@/components/blog/HomeNewsTicker'
+import OrchardArcGallery from '@/components/home/OrchardArcGallery'
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -42,10 +41,10 @@ const processSteps = [
 ]
 
 const coreCrops = [
-  { name: 'Avocado', image: LOCAL_ASSETS.avocado, desc: 'High-demand premium fruit with strong commercial potential.' },
-  { name: 'Dragon Fruit', image: LOCAL_ASSETS.dragonFruitCut, desc: 'Highly profitable crop with low maintenance and high yields.' },
-  { name: 'Mango', image: LOCAL_ASSETS.orchardTeam, desc: 'Specialized exotic mango varieties for domestic and export markets.' },
-  { name: 'Guava', image: LOCAL_ASSETS.guava, desc: 'Premium Thai varieties known for size, taste, and market value.' },
+  { name: 'Avocado', image: CLIENT_ASSETS.avocadoCluster, desc: 'High-demand premium fruit with strong commercial potential.' },
+  { name: 'Dragon Fruit', image: CLIENT_ASSETS.dragonFruitSingle, desc: 'Highly profitable crop with low maintenance and high yields.' },
+  { name: 'Mango', image: CLIENT_ASSETS.mangoCluster, desc: 'Specialized exotic mango varieties for domestic and export markets.' },
+  { name: 'Guava', image: CLIENT_ASSETS.guavaCut, desc: 'Premium Thai varieties known for size, taste, and market value.' },
 ]
 
 const whyDRP = [
@@ -64,25 +63,14 @@ const stats = [
   { value: 5, suffix: '+', label: 'States Served' },
 ]
 
-const galleryImages = [
-  LOCAL_ASSETS.orchardTeam,
-  LOCAL_ASSETS.dragonFruitRows,
-  LOCAL_ASSETS.avocado,
-  LOCAL_ASSETS.dragonFruitHalves,
-  LOCAL_ASSETS.guava,
-  LOCAL_ASSETS.orchardNight,
-]
-
 export default function HomePage() {
   const [activeCropIndex, setActiveCropIndex] = useState<number | null>(null)
-  const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
-  const wa = buildWhatsAppUrl(whatsapp, 'Hello DRP Exotic Farms, I am interested in building an orchard.')
 
   return (
     <>
       <PageMeta
-        title="DRP Exotic Farms | Profitable Exotic Fruit Orchard Consultancy"
-        description="We help farmers, investors, and landowners build profitable exotic fruit orchards from plantation to market."
+        title="DRP Exotic Farms | Cultivating Nourishment"
+        description="We guide what we grow — we’re growers beside you. We help farmers, investors, and landowners build profitable exotic fruit orchards."
         path="/"
       />
 
@@ -90,7 +78,7 @@ export default function HomePage() {
       <section className="relative min-h-[85svh] flex items-center justify-center overflow-hidden bg-primary pt-20">
         <div className="absolute inset-0 z-0">
           <img
-            src={LOCAL_ASSETS.orchardNight}
+            src={CLIENT_ASSETS.orchardOverview}
             alt=""
             className="w-full h-full object-cover opacity-15"
           />
@@ -100,21 +88,24 @@ export default function HomePage() {
         <div className="section-shell relative z-10 text-center">
           <motion.div {...fadeIn}>
             <span className="section-label bg-accent/20 border-accent/30 text-accent mb-4">
-              Agricultural Consultancy
+              From Growers, For Growers
             </span>
             <h1 className="text-neutral text-[clamp(2.5rem,8vw,4.5rem)] leading-[1.05] tracking-tight mb-6">
-              Build Your Profitable <br />
-              <span className="text-accent font-display">Exotic Fruit Orchard</span>
+              Let's Build Your <br />
+              <span className="text-accent font-display">Profitable Orchard</span>
             </h1>
+            <p className="text-accent text-lg sm:text-2xl font-display mb-8 italic opacity-90 max-w-3xl mx-auto leading-tight">
+              "We're growers first, dedicated to helping you build, grow, and sell to the market."
+            </p>
             <p className="text-neutral/70 text-sm sm:text-lg max-w-2xl mx-auto mb-8 leading-relaxed">
-              DRP Exotic Farms helps farmers, investors, and landowners build profitable orchards from plantation to market through scientific guidance.
+              We help farmers and landowners every step of the way—from planting the right exotic fruits to managing the orchard and connecting your harvest with premium buyers.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="btn-primary w-full sm:w-auto">
-                <Link to="/services">Start Your Orchard</Link>
+                <Link to="/produce">Start Your Orchard</Link>
               </Button>
               <Button asChild variant="secondary" size="lg" className="btn-secondary w-full sm:w-auto">
-                <a href={wa} target="_blank" rel="noreferrer">Book Consultation</a>
+                <Link to="/contact">Get In Touch</Link>
               </Button>
             </div>
           </motion.div>
@@ -129,17 +120,19 @@ export default function HomePage() {
         <div className="section-shell">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div {...fadeIn}>
-              <img
-                src={LOCAL_ASSETS.orchardTeam}
-                alt="Who We Are"
-                className="rounded-3xl shadow-xl w-full aspect-[4/3] object-cover sm:max-w-md mx-auto"
-              />
+              <div className="rounded-3xl shadow-xl overflow-hidden group sm:max-w-md mx-auto">
+                <img
+                  src={CLIENT_ASSETS.foundersJoint}
+                  alt="DRP Founders"
+                  className="w-full aspect-square object-cover scale-110 translate-x-1 origin-center transition-transform duration-500 group-hover:scale-125"
+                />
+              </div>
             </motion.div>
             <motion.div {...fadeIn} transition={{ delay: 0.2 }}>
               <span className="section-label">Who We Are</span>
               <h2 className="section-title">Pioneering Exotic Fruit Farming in India</h2>
               <p className="section-description">
-                DRP Exotic Farms is a specialized consultancy firm dedicated to transforming land into high-yield commercial orchards. We guide farmers, investors, and landowners through every step of the exotic fruit farming journey.
+                DRP Exotic Farms is a specialized farming partnership dedicated to transforming land into high-yield commercial orchards. We guide farmers, investors, and landowners through every step of the exotic fruit farming journey.
               </p>
               <div className="mt-8 space-y-4">
                 {[
@@ -200,6 +193,11 @@ export default function HomePage() {
                 </button>
               </motion.div>
             ))}
+          </div>
+          <div className="mt-12 text-center">
+            <Button asChild size="lg" className="btn-primary">
+              <Link to="/services">Explore Services</Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -280,7 +278,7 @@ export default function HomePage() {
           {/* Vision */}
           <div className="grid lg:grid-cols-2 min-h-[400px] bg-primary text-neutral rounded-[2.5rem] overflow-hidden mb-8">
             <div className="relative overflow-hidden">
-              <img src={LOCAL_ASSETS.orchardNight} alt="Vision" className="absolute inset-0 w-full h-full object-cover opacity-40" />
+              <img src={CLIENT_ASSETS.orchardSunrise} alt="Vision" className="absolute inset-0 w-full h-full object-cover opacity-40" />
               <div className="absolute inset-0 bg-gradient-to-r from-primary via-transparent to-transparent hidden lg:block" />
               <div className="absolute inset-0 flex items-center justify-center lg:justify-start lg:pl-16">
                 <Eye className="size-20 sm:size-32 text-accent/20" />
@@ -301,11 +299,11 @@ export default function HomePage() {
               <span className="text-accent font-bold uppercase tracking-[0.2em] text-xs mb-4">The Work</span>
               <h3 className="text-3xl sm:text-5xl font-display mb-6">Our Mission</h3>
               <p className="text-lg text-primary/70 leading-relaxed max-w-md">
-                To provide end-to-end consultancy, premium planting material, and market linkage support, ensuring every orchard project becomes a thriving commercial success.
+                To provide end-to-end grower guidance, premium planting material, and market linkage support, ensuring every orchard project becomes a thriving commercial success.
               </p>
             </div>
             <div className="relative overflow-hidden order-1 lg:order-2">
-              <img src={LOCAL_ASSETS.dragonFruitRows} alt="Mission" className="absolute inset-0 w-full h-full object-cover opacity-30" />
+              <img src={CLIENT_ASSETS.protectedCultivation} alt="Mission" className="absolute inset-0 w-full h-full object-cover opacity-30" />
               <div className="absolute inset-0 bg-gradient-to-l from-secondary via-transparent to-transparent hidden lg:block" />
               <div className="absolute inset-0 flex items-center justify-center lg:justify-end lg:pr-16">
                 <Target className="size-20 sm:size-32 text-primary/10" />
@@ -315,21 +313,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 7 - ROTATING MARQUEE */}
-      <section className="bg-neutral py-10 sm:py-16 overflow-hidden border-y border-primary/5">
-        <div className="flex gap-3 sm:gap-4 animate-marquee whitespace-nowrap">
-          {[...galleryImages, ...galleryImages].map((img, idx) => (
-            <Link
-              key={idx}
-              to="/gallery"
-              aria-label="Open full gallery"
-              className="group w-[220px] sm:w-[350px] aspect-video shrink-0 rounded-2xl overflow-hidden shadow-sm cursor-pointer active:scale-[0.98] transition-transform"
-            >
-              <img src={img} alt="Orchard" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105" />
-            </Link>
-          ))}
-        </div>
-      </section>
+      {/* SECTION 7 - PREMIUM ORCHARD ARC GALLERY */}
+      <OrchardArcGallery />
 
       {/* SECTION 8 - STATS & TRUST BLOCK */}
       <section className="bg-secondary/10">
@@ -337,14 +322,14 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-[1.2fr_1fr] gap-10 sm:gap-12 items-center">
             <motion.div {...fadeIn} className="relative rounded-3xl overflow-hidden group">
               <img 
-                src={LOCAL_ASSETS.dragonFruitRows} 
+                src={CLIENT_ASSETS.publicRecognition} 
                 alt="Orchard Success" 
                 className="w-full h-[300px] sm:h-[400px] object-cover transition-transform duration-1000 group-hover:scale-105" 
               />
               <div className="absolute inset-0 bg-primary/40 flex items-center justify-center p-6 sm:p-8 text-center">
                 <div className="max-w-sm">
                   <Star className="size-8 sm:size-10 text-harvest-gold mx-auto mb-4 fill-harvest-gold" />
-                  <h3 className="text-xl sm:text-2xl font-display text-neutral mb-4">Results Driven Consultancy</h3>
+                  <h3 className="text-xl sm:text-2xl font-display text-neutral mb-4">Results Driven Growth</h3>
                   <p className="text-neutral/80 text-xs sm:text-sm mb-6">Proven expertise in building sustainable and high-ROI orchards across India.</p>
                   <Button asChild variant="secondary" size="sm">
                     <Link to="/about">Learn More</Link>
@@ -398,11 +383,11 @@ export default function HomePage() {
           <motion.div {...fadeIn} className="max-w-2xl mx-auto">
             <h2 className="text-2xl sm:text-4xl font-display mb-4">Ready to Build Your Orchard?</h2>
             <p className="text-xs sm:text-sm text-neutral/60 mb-8 max-w-md mx-auto">
-              Join the community of successful exotic fruit farmers. Book your expert consultation today.
+              Join the community of successful exotic fruit farmers. Start your journey today.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="btn-primary">
-                <a href={wa} target="_blank" rel="noreferrer">Book Consultation</a>
+                <Link to="/about">About Us</Link>
               </Button>
               <Button asChild variant="secondary" size="lg" className="btn-secondary">
                 <Link to="/contact">Contact Us</Link>

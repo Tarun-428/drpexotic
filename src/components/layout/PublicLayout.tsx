@@ -47,9 +47,9 @@ export function PublicLayout() {
   }, [applyWebsiteSettings])
 
   return (
-    <div className="min-h-screen bg-neutral">
+    <div className="flex flex-col min-h-screen bg-neutral">
       <Navbar />
-      <main className="relative">
+      <main className="flex-1 relative">
         <Suspense
           fallback={
             <div className="flex min-h-[40vh] items-center justify-center bg-transparent px-4">

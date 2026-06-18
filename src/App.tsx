@@ -11,6 +11,7 @@ import {
   AdminLoginPage,
   AdminSettingsPage,
   AboutPage,
+  FaqPage,
   BlogPage,
   BlogPostPage,
   chunkReloadStorageKey,
@@ -49,6 +50,7 @@ export default function App() {
         <Route element={<PublicLayout />}>
           <Route index element={<HomePage />} />
           <Route path="about" element={<AboutPage />} />
+          <Route path="faq" element={<FaqPage />} />
           <Route path="services" element={<ServicesPage />} />
           <Route path="produce" element={<ProducePage />} />
           <Route path="gallery" element={<GalleryPage />} />

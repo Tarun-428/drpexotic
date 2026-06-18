@@ -59,6 +59,7 @@ export type GalleryItem = {
   public_id: string
   sort_order: number
   is_published: boolean
+  tags?: string[]
   created_at: string
   updated_at: string
 }

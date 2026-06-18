@@ -1,14 +1,15 @@
-import { LOCAL_ASSETS, LOCAL_GALLERY_IMAGES } from '@/constants/assets'
+import { CLIENT_GALLERY_IMAGES, LOCAL_ASSETS } from '@/constants/assets'
 import type { BlogPost, BlogPostListItem, GalleryItem } from '@/types/cms'
 
-export const FALLBACK_GALLERY_ITEMS: GalleryItem[] = LOCAL_GALLERY_IMAGES.map((item, index) => ({
+export const FALLBACK_GALLERY_ITEMS: GalleryItem[] = CLIENT_GALLERY_IMAGES.map((item, index) => ({
   id: item.id,
-  title: item.alt,
-  description: 'A cinematic orchard study from DRP Exotic Farms.',
+  title: item.title,
+  description: item.alt,
   media_type: 'image',
   media_url: item.url,
   thumbnail_url: item.url,
   public_id: item.id,
+  tags: [...item.tags],
   sort_order: index,
   is_published: true,
   created_at: new Date().toISOString(),
@@ -29,7 +30,7 @@ export const FALLBACK_BLOG_POSTS: BlogPostListItem[] = [
       caption: 'Structured orchard lanes before harvest movement begins.',
       alt_text: 'Structured dragon fruit orchard lanes',
     },
-    tags: ['Harvest', 'Premium quality'],
+    tags: ['Premium quality'],
     categories: ['Editorial'],
     reading_time_minutes: 4,
     status: 'published',
