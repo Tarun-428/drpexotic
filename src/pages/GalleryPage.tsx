@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, Expand, X } from 'lucide-react'
@@ -26,20 +26,45 @@ const masonryShapes = [
   'aspect-square',
 ] as const
 
+type GallerySection = {
+  tag: string
+  items: GalleryItem[]
+}
+
+type LightboxState = {
+  items: GalleryItem[]
+  index: number
+}
+
 export default function GalleryPage() {
   const [images, setImages] = useState<GalleryItem[]>(FALLBACK_GALLERY_ITEMS)
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const [selectedTag, setSelectedTag] = useState<string>('All')
-  const [showAllTags, setShowAllTags] = useState(false)
+  const [activeTag, setActiveTag] = useState<string>('')
+  const [lightboxState, setLightboxState] = useState<LightboxState | null>(null)
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
   const portalTarget = typeof document !== 'undefined' ? document.body : null
 
-  const filteredImages = useMemo(() => {
-    if (selectedTag === 'All') return images
-    return images.filter((img) => img.tags?.includes(selectedTag))
-  }, [images, selectedTag])
+  const tags = useMemo(() => {
+    const dynamicTags = new Set(images.flatMap((img) => img.tags || []))
+    return Array.from(dynamicTags).sort()
+  }, [images])
 
-  const activeImage = activeIndex !== null ? filteredImages[activeIndex] : null
-  const safeActiveIndex = activeIndex ?? 0
+  const gallerySections = useMemo<GallerySection[]>(() => {
+    return tags
+      .map((tag) => ({
+        tag,
+        items: images.filter((img) => img.tags?.includes(tag)),
+      }))
+      .filter((section) => section.items.length > 0)
+  }, [images, tags])
+
+  const untaggedImages = useMemo(
+    () => images.filter((img) => !img.tags || img.tags.length === 0),
+    [images]
+  )
+
+  const activeImage = lightboxState ? lightboxState.items[lightboxState.index] ?? null : null
+  const safeActiveIndex = lightboxState?.index ?? 0
+  const activeLightboxItems = lightboxState?.items ?? []
 
   useEffect(() => {
     let active = true
@@ -56,35 +81,63 @@ export default function GalleryPage() {
   }, [])
 
   useEffect(() => {
-    if (activeIndex === null) return
+    if (lightboxState === null) return
     document.body.style.overflow = 'hidden'
     return () => {
       document.body.style.overflow = ''
     }
-  }, [activeIndex])
+  }, [lightboxState])
 
-  const tags = useMemo(() => {
-    const dynamicTags = new Set(images.flatMap((img) => img.tags || []))
-    return ['All', ...Array.from(dynamicTags).sort()]
-  }, [images])
+  useEffect(() => {
+    if (gallerySections.length === 0) return
 
-  const visibleTags = useMemo(() => {
-    if (showAllTags) return tags
-    
-    // We want to show a limited number of tags
-    // Mobile: 3, Desktop: 8
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
-    const limit = isMobile ? 3 : 8
-    
-    if (tags.length <= limit) return tags
+    setActiveTag((currentTag) =>
+      currentTag && gallerySections.some((section) => section.tag === currentTag)
+        ? currentTag
+        : gallerySections[0].tag
+    )
 
-    // Always include 'All' and the selected tag if it's not 'All'
-    const featured = tags.slice(0, limit)
-    if (selectedTag !== 'All' && !featured.includes(selectedTag)) {
-      featured[limit - 1] = selectedTag // Replace last visible with selected
-    }
-    return featured
-  }, [tags, showAllTags, selectedTag])
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => right.intersectionRatio - left.intersectionRatio)
+
+        const topEntry = visibleEntries[0]
+        const sectionTag = topEntry?.target instanceof HTMLElement ? topEntry.target.dataset.tag : undefined
+
+        if (sectionTag) {
+          setActiveTag(sectionTag)
+        }
+      },
+      {
+        threshold: [0.2, 0.35, 0.5],
+        rootMargin: '-18% 0px -58% 0px',
+      }
+    )
+
+    const observedSections = gallerySections
+      .map((section) => sectionRefs.current[section.tag])
+      .filter((element): element is HTMLElement => Boolean(element))
+
+    observedSections.forEach((element) => observer.observe(element))
+
+    return () => observer.disconnect()
+  }, [gallerySections])
+
+  useEffect(() => {
+    if (activeTag || gallerySections.length === 0) return
+    setActiveTag(gallerySections[0].tag)
+  }, [activeTag, gallerySections])
+
+  const handleTagJump = (tag: string) => {
+    setActiveTag(tag)
+    sectionRefs.current[tag]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
+  const handleOpenLightbox = (items: GalleryItem[], index: number) => {
+    setLightboxState({ items, index })
+  }
 
   return (
     <>
@@ -112,95 +165,147 @@ export default function GalleryPage() {
         </div>
       </section>
 
-      {/* FILTER PILLS */}
-      <section className="bg-neutral pt-8 pb-4">
+      {/* TAG NAV */}
+      <section className="bg-neutral pt-6 pb-4">
         <div className="section-shell py-0">
-          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
-            {visibleTags.map((tag) => (
-              <button
-                key={tag}
-                onClick={() => {
-                  setSelectedTag(tag)
-                  setActiveIndex(null)
-                }}
-                className={`rounded-full px-4 py-1.5 text-xs sm:text-sm font-semibold transition-all duration-300 ${
-                  selectedTag === tag
-                    ? 'bg-primary text-neutral shadow-md'
-                    : 'bg-primary/5 text-primary/70 hover:bg-primary/10 hover:text-primary'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-            {tags.length > (typeof window !== 'undefined' && window.innerWidth < 640 ? 3 : 8) && (
-              <button
-                onClick={() => setShowAllTags(!showAllTags)}
-                className="rounded-full px-4 py-1.5 text-xs sm:text-sm font-bold border border-primary/10 bg-secondary/50 text-primary/70 hover:bg-primary/10 transition-all"
-              >
-                {showAllTags ? 'Show Less' : `View All (${tags.length - visibleTags.length}+)`}
-              </button>
-            )}
+          <div className="sticky top-20 z-20 rounded-2xl border border-primary/5 bg-neutral/90 px-3 py-3 shadow-sm backdrop-blur-md">
+            <div className="flex gap-2 overflow-x-auto whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {tags.map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => handleTagJump(tag)}
+                  className={`shrink-0 rounded-full px-4 py-1.5 text-xs sm:text-sm font-semibold transition-all duration-300 ${
+                    activeTag === tag
+                      ? 'bg-primary text-neutral shadow-md'
+                      : 'bg-primary/5 text-primary/70 hover:bg-primary/10 hover:text-primary'
+                  }`}
+                >
+                  {tag}
+                </button>
+              ))}
+              {untaggedImages.length > 0 && (
+                <span className="shrink-0 rounded-full border border-dashed border-primary/10 px-4 py-1.5 text-xs sm:text-sm font-semibold text-primary/40">
+                  Featured {untaggedImages.length}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* MASONRY GALLERY */}
-      <section className="bg-neutral pt-8 pb-20">
-        <div className="section-shell pt-0">
-          <AnimatePresence mode="popLayout">
-            <motion.div 
-              key={selectedTag}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="masonry-grid columns-2 md:columns-3 lg:columns-4"
+      {/* TAG SECTIONS */}
+      <section className="bg-neutral pb-20 pt-2">
+        <div className="section-shell space-y-16 pt-0">
+          {gallerySections.map((section, sectionIndex) => (
+            <div
+              key={section.tag}
+              ref={(node) => {
+                sectionRefs.current[section.tag] = node
+              }}
+              data-tag={section.tag}
+              className="scroll-mt-28"
             >
-              {filteredImages.map((img, idx) => (
-                <div
-                  key={img.id}
-                  className="masonry-item mb-4 sm:mb-6"
-                >
-                  <button
-                    type="button"
-                    className={`group relative block w-full overflow-hidden rounded-xl border border-primary/5 bg-secondary/10 text-left shadow-sm transition-all hover:shadow-lg active:scale-[0.98] sm:rounded-2xl ${masonryShapes[idx % masonryShapes.length]}`}
-                    onClick={() => setActiveIndex(idx)}
-                    aria-label={`Open ${img.title} in gallery viewer`}
-                  >
-                  {img.media_type === 'video' ? (
-                    <video
-                      src={img.media_url}
-                      className="h-full w-full object-cover"
-                      muted
-                      playsInline
-                      preload="metadata"
-                    />
-                  ) : (
-                    <img
-                      src={img.media_url}
-                      alt={img.title}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
-                      loading="lazy"
-                    />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3 sm:p-6">
-                    <div className="flex justify-between items-end w-full">
-                      <h3 className="text-neutral font-display text-sm sm:text-lg leading-tight">{img.title}</h3>
-                      <Expand className="text-accent size-4" />
-                    </div>
-                  </div>
-                  {/* Mobile Tap Cue */}
-                  <div className="tap-indicator bottom-4 right-4">
-                    <Expand className="size-3 text-accent" />
-                  </div>
-                  </button>
+              <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
+                <div>
+                  <h2 className="mt-3 font-display text-2xl text-primary sm:text-4xl">{section.tag}</h2>
                 </div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-          {filteredImages.length === 0 && (
-            <div className="text-center py-20 text-primary/50 font-medium">
-              No items found for this tag.
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary/45 sm:text-sm">
+                  {String(section.items.length).padStart(2, '0')} items
+                </p>
+              </div>
+
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={section.tag}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="masonry-grid columns-2 md:columns-3 lg:columns-4"
+                >
+                  {section.items.map((img, idx) => (
+                    <div key={`${section.tag}-${img.id}`} className="masonry-item mb-4 sm:mb-6">
+                      <button
+                        type="button"
+                        className={`group relative block w-full overflow-hidden rounded-xl border border-primary/5 bg-secondary/10 text-left shadow-sm transition-all hover:shadow-lg active:scale-[0.98] sm:rounded-2xl ${masonryShapes[(sectionIndex + idx) % masonryShapes.length]}`}
+                        onClick={() => handleOpenLightbox(section.items, idx)}
+                        aria-label={`Open ${img.title} in gallery viewer`}
+                      >
+                        {img.media_type === 'video' ? (
+                          <video
+                            src={img.media_url}
+                            className="h-full w-full object-cover"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          />
+                        ) : (
+                          <img
+                            src={img.media_url}
+                            alt={img.title}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
+                            loading="lazy"
+                          />
+                        )}
+                        <div className="tap-indicator bottom-4 right-4">
+                          <Expand className="size-3 text-accent" />
+                        </div>
+                      </button>
+                    </div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          ))}
+
+          {untaggedImages.length > 0 && (
+            <div className="scroll-mt-28">
+              <div className="mb-6 flex items-end justify-between gap-4 sm:mb-8">
+                <div>
+                  <h2 className="mt-3 font-display text-2xl text-primary sm:text-4xl">Untagged images</h2>
+                </div>
+                <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary/45 sm:text-sm">
+                  {String(untaggedImages.length).padStart(2, '0')} items
+                </p>
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="masonry-grid columns-2 md:columns-3 lg:columns-4"
+              >
+                {untaggedImages.map((img, idx) => (
+                  <div key={`untagged-${img.id}`} className="masonry-item mb-4 sm:mb-6">
+                    <button
+                      type="button"
+                      className={`group relative block w-full overflow-hidden rounded-xl border border-primary/5 bg-secondary/10 text-left shadow-sm transition-all hover:shadow-lg active:scale-[0.98] sm:rounded-2xl ${masonryShapes[idx % masonryShapes.length]}`}
+                      onClick={() => handleOpenLightbox(untaggedImages, idx)}
+                      aria-label={`Open ${img.title} in gallery viewer`}
+                    >
+                      {img.media_type === 'video' ? (
+                        <video
+                          src={img.media_url}
+                          className="h-full w-full object-cover"
+                          muted
+                          playsInline
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          src={img.media_url}
+                          alt={img.title}
+                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105"
+                          loading="lazy"
+                        />
+                      )}
+                      <div className="tap-indicator bottom-4 right-4">
+                        <Expand className="size-3 text-accent" />
+                      </div>
+                    </button>
+                  </div>
+                ))}
+              </motion.div>
             </div>
           )}
         </div>
@@ -213,9 +318,12 @@ export default function GalleryPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[100] bg-primary/95 backdrop-blur-lg flex items-center justify-center p-4 sm:p-10"
-            onClick={() => setActiveIndex(null)}
+            onClick={() => setLightboxState(null)}
           >
-            <button className="absolute top-6 right-6 sm:top-8 sm:right-8 text-neutral/50 hover:text-neutral transition-colors">
+            <button
+              className="absolute top-6 right-6 sm:top-8 sm:right-8 text-neutral/50 hover:text-neutral transition-colors"
+              onClick={() => setLightboxState(null)}
+            >
               <X className="size-8" />
             </button>
 
@@ -235,13 +343,23 @@ export default function GalleryPage() {
               <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 flex justify-between px-2 sm:px-4 pointer-events-none">
                 <button
                   className="pointer-events-auto size-10 sm:size-12 rounded-full bg-neutral/10 hover:bg-neutral/20 flex items-center justify-center transition-colors"
-                  onClick={() => setActiveIndex((safeActiveIndex - 1 + filteredImages.length) % filteredImages.length)}
+                  onClick={() =>
+                    setLightboxState({
+                      items: activeLightboxItems,
+                      index: (safeActiveIndex - 1 + activeLightboxItems.length) % activeLightboxItems.length,
+                    })
+                  }
                 >
                   <ArrowLeft className="text-neutral size-5 sm:size-6" />
                 </button>
                 <button
                   className="pointer-events-auto size-10 sm:size-12 rounded-full bg-neutral/10 hover:bg-neutral/20 flex items-center justify-center transition-colors"
-                  onClick={() => setActiveIndex((safeActiveIndex + 1) % filteredImages.length)}
+                  onClick={() =>
+                    setLightboxState({
+                      items: activeLightboxItems,
+                      index: (safeActiveIndex + 1) % activeLightboxItems.length,
+                    })
+                  }
                 >
                   <ArrowRight className="text-neutral size-5 sm:size-6" />
                 </button>

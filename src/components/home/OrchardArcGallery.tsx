@@ -9,6 +9,10 @@ gsap.registerPlugin(ScrollTrigger);
 const OrchardArcGallery: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<gsap.core.Tween | null>(null);
+  const wheelResumeTimerRef = useRef<number | null>(null);
+  const rotationOffsetRef = useRef(0);
+  const dragStateRef = useRef({ isDragging: false, startX: 0, startOffset: 0, moved: false, pointerType: 'mouse' as PointerEvent['pointerType'] });
   const navigate = useNavigate();
   
   // Keep the exact same number of slots as the full gallery to preserve the arc design
@@ -34,8 +38,10 @@ const OrchardArcGallery: React.FC = () => {
     const angleStep = (Math.PI * 2) / totalItems; 
 
     const updatePositions = () => {
+      const currentAngle = rotationProxy.angle + rotationOffsetRef.current;
+
       cards.forEach((card, i) => {
-        const angle = rotationProxy.angle + (i * angleStep);
+        const angle = currentAngle + (i * angleStep);
         
         const x = centerX + Math.cos(angle) * radiusX;
         const y = centerY - Math.sin(angle) * radiusY;
@@ -69,13 +75,71 @@ const OrchardArcGallery: React.FC = () => {
       ease: "none",
       onUpdate: updatePositions
     });
+    timelineRef.current = tl;
 
     // Interaction
-    const handleMouseEnter = () => gsap.to(tl, { timeScale: 0.2, duration: 1 });
-    const handleMouseLeave = () => gsap.to(tl, { timeScale: 1, duration: 1 });
+    const handleMouseEnter = () => {
+      if (!dragStateRef.current.isDragging) gsap.to(tl, { timeScale: 0.2, duration: 1 });
+    };
+    const handleMouseLeave = () => {
+      if (!dragStateRef.current.isDragging) gsap.to(tl, { timeScale: 1, duration: 1 });
+    };
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!dragStateRef.current.isDragging) return;
+
+      const deltaX = event.clientX - dragStateRef.current.startX;
+      if (Math.abs(deltaX) > 4) dragStateRef.current.moved = true;
+
+      const directionMultiplier = dragStateRef.current.pointerType === 'touch' ? -1 : 1;
+      rotationOffsetRef.current = dragStateRef.current.startOffset + deltaX * 0.008 * directionMultiplier;
+      tl.pause();
+      updatePositions();
+    };
+
+    const handleWheel = (event: WheelEvent) => {
+      const target = event.target as HTMLElement | null;
+      if (!target?.closest('.gallery-card')) return;
+
+      const horizontalDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+        ? event.deltaX
+        : event.shiftKey
+          ? event.deltaY
+          : 0;
+
+      if (horizontalDelta === 0) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (wheelResumeTimerRef.current !== null) {
+        window.clearTimeout(wheelResumeTimerRef.current);
+      }
+
+      timelineRef.current?.pause();
+      rotationOffsetRef.current += horizontalDelta * 0.004;
+      updatePositions();
+
+      wheelResumeTimerRef.current = window.setTimeout(() => {
+        if (!dragStateRef.current.isDragging) {
+          timelineRef.current?.play();
+          if (timelineRef.current) gsap.to(timelineRef.current, { timeScale: 1, duration: 0.6 });
+        }
+      }, 140);
+    };
+
+    const handlePointerUp = () => {
+      dragStateRef.current.isDragging = false;
+      gsap.to(tl, { timeScale: 1, duration: 0.6 });
+      tl.play();
+    };
 
     containerRef.current.addEventListener('mouseenter', handleMouseEnter);
     containerRef.current.addEventListener('mouseleave', handleMouseLeave);
+    containerRef.current.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
 
     ScrollTrigger.create({
       trigger: sectionRef.current,
@@ -86,6 +150,17 @@ const OrchardArcGallery: React.FC = () => {
 
     return () => {
       tl.kill();
+      timelineRef.current = null;
+      if (wheelResumeTimerRef.current !== null) {
+        window.clearTimeout(wheelResumeTimerRef.current);
+        wheelResumeTimerRef.current = null;
+      }
+      containerRef.current?.removeEventListener('mouseenter', handleMouseEnter);
+      containerRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+      containerRef.current?.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
       ScrollTrigger.getAll().forEach(t => t.kill());
     };
   }, []);
@@ -108,8 +183,49 @@ const OrchardArcGallery: React.FC = () => {
         {items.map((item, idx) => (
           <div
             key={`${item.id}-${idx}`}
-            className="gallery-card absolute w-[100px] sm:w-[160px] aspect-[3/4] cursor-pointer group"
-            onClick={() => navigate('/gallery')}
+            className="gallery-card absolute w-[100px] sm:w-[160px] aspect-[3/4] cursor-grab active:cursor-grabbing select-none touch-pan-y group"
+            onPointerDown={(event) => {
+              dragStateRef.current.isDragging = true;
+              dragStateRef.current.startX = event.clientX;
+              dragStateRef.current.startOffset = rotationOffsetRef.current;
+              dragStateRef.current.moved = false;
+              dragStateRef.current.pointerType = event.pointerType;
+              event.currentTarget.setPointerCapture(event.pointerId);
+              timelineRef.current?.pause();
+            }}
+            onPointerMove={(event) => {
+              if (!dragStateRef.current.isDragging) return;
+
+              const deltaX = event.clientX - dragStateRef.current.startX;
+              if (Math.abs(deltaX) > 4) dragStateRef.current.moved = true;
+
+              const directionMultiplier = dragStateRef.current.pointerType === 'touch' ? -1 : 1;
+              rotationOffsetRef.current = dragStateRef.current.startOffset + deltaX * 0.008 * directionMultiplier;
+              timelineRef.current?.pause();
+              event.currentTarget.setPointerCapture(event.pointerId);
+              event.preventDefault();
+            }}
+            onPointerUp={() => {
+              dragStateRef.current.isDragging = false;
+              timelineRef.current?.play();
+              if (timelineRef.current) gsap.to(timelineRef.current, { timeScale: 1, duration: 0.6 });
+            }}
+            onPointerCancel={() => {
+              dragStateRef.current.isDragging = false;
+              dragStateRef.current.moved = false;
+              timelineRef.current?.play();
+              if (timelineRef.current) gsap.to(timelineRef.current, { timeScale: 1, duration: 0.6 });
+            }}
+            onClick={(event) => {
+              if (dragStateRef.current.moved) {
+                event.preventDefault();
+                event.stopPropagation();
+                dragStateRef.current.moved = false;
+                return;
+              }
+
+              navigate('/gallery');
+            }}
           >
             <div className="w-full h-full rounded-2xl overflow-hidden shadow-lg border-2 border-white transition-all duration-500 group-hover:shadow-glow group-hover:scale-105">
               <img 

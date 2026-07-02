@@ -24,7 +24,7 @@ const faqCategories = [
       },
       {
         question: 'How long does it take to set up an orchard?',
-        answer: 'From initial land assessment to complete plantation and system setup, the process typically takes 3 to 6 months depending on the crop, land readiness, and season.'
+        answer: 'From initial land assessment to complete plantation and system setup, the process typically takes 2 to 4 months depending on the crop, land readiness, and season.'
       }
     ]
   },
@@ -37,7 +37,7 @@ const faqCategories = [
       },
       {
         question: 'Do you provide the planting material?',
-        answer: 'Yes. We supply premium, high-yield, and disease-resistant planting materials directly from our trusted nurseries to ensure the best foundation for your orchard.'
+        answer: 'Yes. We supply high quality, high-yielding, and disease-resistant planting materials directly from our trusted nurseries to ensure the best foundation for your orchard.'
       }
     ]
   },
@@ -46,7 +46,7 @@ const faqCategories = [
     items: [
       {
         question: 'What kind of irrigation setup is required?',
-        answer: 'Exotic crops require precise water management. We design and install automated drip irrigation systems tailored to your specific crop\'s needs, optimizing water use and nutrient delivery.'
+        answer: 'Fruit crops require precise water management. We design and install automated drip irrigation systems tailored to your specific crop\'s needs, optimizing water use and nutrient delivery.'
       },
       {
         question: 'Do you offer ongoing farm management support?',

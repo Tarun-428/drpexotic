@@ -10,18 +10,18 @@ export type FruitVariety = {
 }
 
 export const FRUIT_VARIETIES: FruitVariety[] = [
+  // {
+  //   slug: 'blueberry',
+  //   name: 'Blueberry',
+  //   tagline: 'Acidic soils, disciplined nutrition, clean picking windows.',
+  //   description:
+  //     'High-value berries with tight quality gates—suited to controlled nutrition programs and residue-aware protocols.',
+  //   notes: ['Premium retail & ingredient channels', 'Cold-chain sensitive—planned logistics'],
+  //   image: CLIENT_ASSETS.blueberry,
+  // },
   {
-    slug: 'blueberry',
-    name: 'Blueberry',
-    tagline: 'Acidic soils, disciplined nutrition, clean picking windows.',
-    description:
-      'High-value berries with tight quality gates—suited to controlled nutrition programs and residue-aware protocols.',
-    notes: ['Premium retail & ingredient channels', 'Cold-chain sensitive—planned logistics'],
-    image: CLIENT_ASSETS.blueberry,
-  },
-  {
-    slug: 'avocado',
-    name: 'Avocado',
+    slug: 'hass-avocado',
+    name: 'Hass Avocado',
     tagline: 'Water-smart establishment, long-horizon canopy design.',
     description:
       'Orchard layouts that respect slope, drainage, and varietal behaviour—aimed at steady bearing, not short-lived spikes.',
@@ -38,8 +38,8 @@ export const FRUIT_VARIETIES: FruitVariety[] = [
     image: LOCAL_ASSETS.dragonFruitWhole,
   },
   {
-    slug: 'kesar-mango',
-    name: 'Kesar mango',
+    slug: 'Mango',
+    name: 'Mango',
     tagline: 'Regional excellence with traceable orchard practices.',
     description:
       'Heritage flavour with modern nutrition diagnostics—bridging market demand and sustainable intensity.',

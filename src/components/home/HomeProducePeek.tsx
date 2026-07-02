@@ -12,7 +12,7 @@ export function HomeProducePeek() {
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-gold-700">Produce</p>
           <h2 className="mt-2 font-display text-3xl text-forest-900 sm:text-4xl">Signature varieties</h2>
           <p className="mt-3 max-w-xl text-forest-900/75">
-            Blueberry, avocado, dragon fruit, Kesar mango, Red Diamond guava, and banana—each managed with modern
+            Blueberry, avocado, dragon fruit, Mango, Red Diamond guava, and banana—each managed with modern
             nutrition intelligence and sustainable intensity.
           </p>
         </div>

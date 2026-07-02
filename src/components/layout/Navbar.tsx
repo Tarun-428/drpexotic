@@ -61,6 +61,8 @@ function NavItem({
 export function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const brandName = useSiteConfigStore((s) => s.config.brandName)
+  const brandLabel = brandName.replace('™', '').trim()
   const whatsapp = useSiteConfigStore((s) => s.config.contact.whatsappE164)
   const wa = buildWhatsAppUrl(
     whatsapp,
@@ -89,7 +91,8 @@ export function Navbar() {
           </div>
           <div className="flex flex-col">
             <span className={cn('font-display text-xl font-bold leading-none transition-colors', scrolled ? 'text-primary' : 'text-neutral')}>
-              DRP Exotic Farms
+              {brandLabel}
+              <sup className="ml-0.5 align-super text-[0.55em]">TM</sup>
             </span>
             <span className={cn('text-[0.6rem] uppercase tracking-[0.2em] font-bold mt-1 transition-colors', scrolled ? 'text-primary/50' : 'text-neutral/50')}>
               Cultivating Nourishment

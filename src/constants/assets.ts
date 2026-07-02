@@ -62,6 +62,7 @@ export const LOCAL_GALLERY_IMAGES = [
 ] as const
 
 const clientImage = (name: string) => `/client-images/${name}.jpg`
+const clientImageWithExt = (name: string, ext: string) => `/client-images/${name}.${ext}`
 
 export const CLIENT_ASSETS = {
   founder: clientImage('founder'),
@@ -77,7 +78,7 @@ export const CLIENT_ASSETS = {
   orchardRows: clientImage('IMG_7840'),
   orchardSunrise: clientImage('IMG_8222'),
   nightBloom: clientImage('IMG_5733'),
-  dragonFruitSingle: clientImage('IMG_6438'),
+  dragonFruitSingle: clientImage('img_dragon_new'),
   dragonFruitPlated: clientImage('IMG_5286'),
   yellowDragonFruit: clientImage('IMG_6280'),
   avocadoCluster: clientImage('IMG_1870'),
@@ -88,6 +89,7 @@ export const CLIENT_ASSETS = {
   guavaHarvest: clientImage('IMG_8674'),
   cropInspection: clientImage('IMG_8568'),
   guavaCut: clientImage('IMG_8608'),
+  guavaNew: clientImageWithExt('guava_new', 'png'),
   foundersJoint: clientImage('IMG_1982'),
   blueberry: clientImage('blueberry'),
   banana: clientImage('banana'),

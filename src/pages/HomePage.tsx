@@ -19,7 +19,7 @@ import {
 } from 'lucide-react'
 import { PageMeta } from '@/components/seo/PageMeta'
 import { Button } from '@/components/ui/button'
-import { AnimatedNumber } from '@/components/ui/AnimatedNumber'
+
 import { CLIENT_ASSETS } from '@/constants/assets'
 import { HomeNewsTicker } from '@/components/blog/HomeNewsTicker'
 import OrchardArcGallery from '@/components/home/OrchardArcGallery'
@@ -42,9 +42,9 @@ const processSteps = [
 
 const coreCrops = [
   { name: 'Avocado', image: CLIENT_ASSETS.avocadoCluster, desc: 'High-demand premium fruit with strong commercial potential.' },
-  { name: 'Dragon Fruit', image: CLIENT_ASSETS.dragonFruitSingle, desc: 'Highly profitable crop with low maintenance and high yields.' },
+  { name: 'Dragon Fruit', image: CLIENT_ASSETS.dragonFruitSingle, desc: 'Highly profitable crop with low maintenance and high yields.', objectPosition: '50% 32%' },
   { name: 'Mango', image: CLIENT_ASSETS.mangoCluster, desc: 'Specialized exotic mango varieties for domestic and export markets.' },
-  { name: 'Guava', image: CLIENT_ASSETS.guavaCut, desc: 'Premium Thai varieties known for size, taste, and market value.' },
+  { name: 'Guava', image: CLIENT_ASSETS.guavaNew, desc: 'Premium Thai varieties known for size, taste, and market value.', objectPosition: '50% 34%' },
 ]
 
 const whyDRP = [
@@ -56,12 +56,7 @@ const whyDRP = [
   { icon: Users, title: 'Long-Term Partnership', desc: 'We grow with you, providing ongoing guidance as your farm matures.' },
 ]
 
-const stats = [
-  { value: 105, suffix: '+', label: 'Acres Managed' },
-  { value: 60, suffix: '+', label: 'Farmers Guided' },
-  { value: 50, suffix: '+', label: 'Orchards Developed' },
-  { value: 5, suffix: '+', label: 'States Served' },
-]
+
 
 export default function HomePage() {
   const [activeCropIndex, setActiveCropIndex] = useState<number | null>(null)
@@ -177,9 +172,12 @@ export default function HomePage() {
                   <img 
                     src={crop.image} 
                     alt={crop.name} 
-                    className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-active:scale-105 ${
+                    className={`w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105 group-active:scale-105 ${
                       activeCropIndex === idx ? 'scale-105' : ''
-                    }`} 
+                    }`}
+                    style={{ objectPosition: crop.objectPosition ?? '50% 50%' }}
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4 text-left">
@@ -202,7 +200,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 4 - OUR PROCESS - Optimized for Mobile (2x3) */}
+      {/* SECTION 4 - PREMIUM ORCHARD ARC GALLERY */}
+      <OrchardArcGallery />
+
+      {/* SECTION 5 - OUR PROCESS - Enhanced Mobile Experience */}
       <section className="bg-neutral relative overflow-hidden">
         <div className="section-shell">
           <div className="text-center mb-12 sm:mb-16">
@@ -210,9 +211,10 @@ export default function HomePage() {
             <h2 className="section-title">Plantation to Market</h2>
           </div>
 
-          <div className="relative max-w-5xl mx-auto">
+          {/* Desktop: Horizontal with line; Mobile: Vertical cards */}
+          <div className="hidden lg:block relative max-w-5xl mx-auto">
             {/* Connecting Line for Desktop */}
-            <div className="hidden lg:block absolute top-10 left-0 right-0 h-0.5 bg-primary/5 z-0">
+            <div className="absolute top-10 left-0 right-0 h-0.5 bg-primary/5 z-0">
               <motion.div 
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
@@ -221,9 +223,7 @@ export default function HomePage() {
                 className="h-full bg-harvest-gold origin-left"
               />
             </div>
-
-            {/* Grid: 2 columns on mobile, 6 on desktop */}
-            <div className="grid grid-cols-2 lg:grid-cols-6 gap-6 sm:gap-8 relative z-10">
+            <div className="grid grid-cols-6 gap-8 relative z-10">
               {processSteps.map((step, idx) => (
                 <motion.div 
                   key={step.title}
@@ -231,14 +231,40 @@ export default function HomePage() {
                   transition={{ delay: idx * 0.1 }}
                   className="flex flex-col items-center text-center"
                 >
-                  <div className="size-14 sm:size-16 bg-primary rounded-full flex items-center justify-center text-accent mb-4 shadow-lg border-2 border-white relative">
-                    <step.icon className="size-6 sm:size-8" />
+                  <div className="size-16 bg-primary rounded-full flex items-center justify-center text-accent mb-4 shadow-lg border-2 border-white relative">
+                    <step.icon className="size-8" />
                     <div className="absolute -top-2 -right-2 size-6 bg-harvest-gold rounded-full flex items-center justify-center text-primary text-[0.6rem] font-bold">
                       {idx + 1}
                     </div>
                   </div>
-                  <h3 className="text-xs sm:text-sm font-bold text-primary mb-1">{step.title}</h3>
-                  <p className="text-[0.6rem] text-primary/50 max-w-[120px] hidden sm:block">{step.desc}</p>
+                  <h3 className="text-sm font-bold text-primary mb-2">{step.title}</h3>
+                  <p className="text-xs text-primary/50">{step.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile: Vertical Timeline */}
+          <div className="lg:hidden relative px-4">
+            <div className="absolute left-11 top-0 bottom-0 w-1 bg-gradient-to-b from-harvest-gold via-harvest-gold to-harvest-gold/20"></div>
+            <div className="space-y-8">
+              {processSteps.map((step, idx) => (
+                <motion.div 
+                  key={step.title}
+                  {...fadeIn}
+                  transition={{ delay: idx * 0.1 }}
+                  className="relative pl-24 pt-2"
+                >
+                  <div className="absolute left-8 top-4 size-16 bg-primary rounded-full flex items-center justify-center text-accent shadow-lg border-4 border-neutral -translate-x-1/2 z-10">
+                    <step.icon className="size-7" />
+                    <div className="absolute -top-2 -right-2 size-7 bg-harvest-gold rounded-full flex items-center justify-center text-primary text-[0.7rem] font-bold">
+                      {idx + 1}
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-2xl p-5 shadow-sm border border-primary/5 hover:shadow-lg transition-all mt-6">
+                    <h3 className="text-sm font-bold text-primary mb-2">{step.title}</h3>
+                    <p className="text-xs text-primary/60 leading-relaxed">{step.desc}</p>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -246,7 +272,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 5 - WHY DRP */}
+      {/* SECTION 6 - WHY DRP */}
       <section className="bg-secondary/20">
         <div className="section-shell">
           <div className="text-center mb-12 sm:mb-16">
@@ -272,7 +298,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 6 - VISION & MISSION - Split Story Layout (Option 1) */}
+      {/* SECTION 7 - VISION & MISSION - Split Story Layout (Option 1) */}
       <section className="bg-neutral overflow-hidden">
         <div className="section-shell py-0">
           {/* Vision */}
@@ -313,52 +339,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 7 - PREMIUM ORCHARD ARC GALLERY */}
-      <OrchardArcGallery />
-
-      {/* SECTION 8 - STATS & TRUST BLOCK */}
-      <section className="bg-secondary/10">
-        <div className="section-shell">
-          <div className="grid lg:grid-cols-[1.2fr_1fr] gap-10 sm:gap-12 items-center">
-            <motion.div {...fadeIn} className="relative rounded-3xl overflow-hidden group">
-              <img 
-                src={CLIENT_ASSETS.publicRecognition} 
-                alt="Orchard Success" 
-                className="w-full h-[300px] sm:h-[400px] object-cover transition-transform duration-1000 group-hover:scale-105" 
-              />
-              <div className="absolute inset-0 bg-primary/40 flex items-center justify-center p-6 sm:p-8 text-center">
-                <div className="max-w-sm">
-                  <Star className="size-8 sm:size-10 text-harvest-gold mx-auto mb-4 fill-harvest-gold" />
-                  <h3 className="text-xl sm:text-2xl font-display text-neutral mb-4">Results Driven Growth</h3>
-                  <p className="text-neutral/80 text-xs sm:text-sm mb-6">Proven expertise in building sustainable and high-ROI orchards across India.</p>
-                  <Button asChild variant="secondary" size="sm">
-                    <Link to="/about">Learn More</Link>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, idx) => (
-                <motion.div
-                  key={stat.label}
-                  {...fadeIn}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-white p-5 sm:p-6 rounded-2xl border border-primary/5 shadow-sm text-center"
-                >
-                  <div className="text-2xl sm:text-4xl font-bold text-harvest-orange mb-1">
-                    <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-                  </div>
-                  <div className="text-[0.5rem] sm:text-[0.6rem] uppercase tracking-[0.2em] text-primary/40 font-bold">
-                    {stat.label}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 9 - PARTNERS STRIP */}
+      {/* SECTION 8 - PARTNERS STRIP */}
       <section className="bg-neutral border-y border-primary/5">
         <div className="section-shell py-8 sm:py-10">
           <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-16 opacity-60 grayscale hover:opacity-100 hover:grayscale-0 transition-all cursor-default">
@@ -377,7 +358,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* SECTION 10 - CTA */}
+      {/* SECTION 9 - CTA */}
       <section className="bg-primary text-neutral text-center">
         <div className="section-shell py-12 sm:py-16">
           <motion.div {...fadeIn} className="max-w-2xl mx-auto">

@@ -22,21 +22,24 @@ const milestones = [
   { year: '2026', title: 'DRP Today', desc: 'A leading name in exotic farming, empowering the next generation of growers.' },
 ]
 
+
 const visionaries = [
   {
-    name: 'Dharmesh Patel',
-    role: 'Founder',
-    intro: 'Visionary behind DRP, dedicated to agricultural excellence.',
+    name: 'Dinesh Patidar',
+    role: 'Regional Advisor',
+    intro: 'Experienced farmer and advisor who understands traditional farming challenges.',
     image: CLIENT_ASSETS.founder,
-    description: 'With deep roots in agriculture and a vision for innovation, Dharmesh leads the strategic direction and orchard development at DRP Exotic Farms.',
+    description:
+      'With 35 years of farming experience and 11 years of horticulture specialization, Dinesh Patidar has helped many farmers establish fruit-based farming operations. Beyond cultivation, he has guided farmers in marketing and sales, helping strengthen their economic resilience.',
     icons: [<Zap key="zap" className="size-5 text-accent" />, <Award key="award" className="size-5 text-accent" />]
   },
   {
-    name: 'Prakash Patel',
-    role: 'Co-Founder',
-    intro: 'Operations expert ensuring every orchard meets global standards.',
+    name: 'Udit Dinesh Patidar',
+    role: 'Head of Marketing',
+    intro: 'Leads brand, marketing, and market development for DRP.',
     image: CLIENT_ASSETS.cofounder,
-    description: 'Prakash brings decades of technical expertise in soil management and irrigation systems, ensuring every grower achieves maximum yield.',
+    description:
+      'Udit Dinesh Patidar leads marketing and sales at DRP Exotic Farms. With a strategic, innovation-driven vision, he plays a key role in growing the brand. By combining modern business practices with progressive agriculture, he has helped position DRP as a recognized name in the premium exotic produce segment.',
     icons: [<Briefcase key="briefcase" className="size-5 text-accent" />, <Target key="target" className="size-5 text-accent" />]
   },
   {
@@ -67,27 +70,27 @@ export default function AboutPage() {
           <motion.div {...fadeIn} className="max-w-3xl">
             <span className="section-label border-neutral/20 bg-neutral/10 text-neutral">About DRP</span>
             <h1 className="text-4xl sm:text-6xl font-display leading-tight mt-6 mb-6">
-              Helping You <span className="text-accent">Build & Grow</span>
+              Growers <span className="text-accent">First, Always</span>
             </h1>
             <p className="text-lg text-neutral/80 leading-relaxed">
-              As growers ourselves, we understand the journey. We are here to help you set up your farm, grow high-yield exotic fruits, and successfully sell them to the market.
+              We work the land, we study the crop, and we stay close to every orchard we build. Our approach is rooted in practical farming, disciplined care, and long-term harvest success.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* 2. OUR VISION (Adapted from Operations) */}
+      {/* 2. ROOTED IN THE FIELD */}
       <section className="bg-secondary/20">
         <div className="section-shell">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <motion.div {...fadeIn}>
-              <span className="section-label">Our Vision</span>
-              <h2 className="section-title">Cultivating Success through Science</h2>
+              <span className="section-label">Who We Are</span>
+              <h2 className="section-title">Growers Who Stay Close to the Crop</h2>
               <p className="section-description">
-                Our vision is to bridge the gap between traditional farming and modern commercial success. We believe in data-driven insights to manage irrigation, nutrition, and pest control, ensuring maximum efficiency for every grower.
+                DRP Exotic Farms is built by people who understand orchard rhythms, plant stress, canopy balance, and harvest timing. We don’t just design farm plans; we remain involved through planting, care, and crop readiness.
               </p>
               <div className="mt-6 grid grid-cols-2 gap-4">
-                {['Drip Irrigation', 'Organic Protocols', 'Soil Monitoring', 'Quality Control'].map((item) => (
+                {['Hands-on Field Visits', 'Crop Rhythm Awareness', 'Canopy & Nutrition Care', 'Harvest Readiness'].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-primary text-sm font-semibold">
                     <CheckCircle2 className="size-4 text-accent" />
                     {item}

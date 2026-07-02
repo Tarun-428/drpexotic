@@ -45,10 +45,10 @@ export default function ServicesPage() {
           <motion.div {...fadeIn} className="max-w-3xl mx-auto">
             <span className="section-label border-neutral/20 bg-neutral/10 text-neutral">Grower Support</span>
             <h1 className="text-4xl sm:text-6xl font-display leading-tight mt-6 mb-6">
-              WE HELP <span className="text-accent">YOU WITH</span>
+              Helping You <span className="text-accent">Build & Grow</span>
             </h1>
             <p className="text-lg text-neutral/80 leading-relaxed">
-              We provide 360-degree Grower Guidance to establish and manage highly profitable commercial exotic fruit orchards.
+              As growers ourselves, we understand the journey. We are here to help you set up your farm, grow high-yield exotic fruits, and successfully sell them to the market.
             </p>
           </motion.div>
         </div>

@@ -33,6 +33,7 @@ const legalLinks = [
 
 export function Footer() {
   const brandName = useSiteConfigStore((s) => s.config.brandName)
+  const brandLabel = brandName.replace('™', '').trim()
   const socialLinks = useSiteConfigStore((s) => s.config.socialLinks)
 
   const visibleSocials = socialPlatforms.flatMap(({ key, label, Icon }) => {
@@ -51,8 +52,8 @@ export function Footer() {
               </div>
               <div className="flex flex-col">
                 <span className="font-display text-xl font-bold leading-none">
-                  {brandName}
-                  <sup>TM</sup>
+                  {brandLabel}
+                  <sup className="ml-0.5 align-super text-[0.55em]">TM</sup>
                 </span>
                 <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold mt-1 text-neutral/50">
                   Cultivating Nourishment
